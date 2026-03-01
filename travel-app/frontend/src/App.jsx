@@ -58,6 +58,16 @@ function App() {
 
   return (
     <div style={{ paddingBottom: '80px' }}>
+      {/* ✅ Tailwind Test Banner - Remove after testing */}
+      <div className="bg-gradient-to-r from-primary to-secondary text-white py-4 px-6 rounded-xl shadow-lg mb-6 mx-4">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-xl font-bold">🎨 Tailwind v3 is Working!</h2>
+          <p className="text-sm opacity-90 mt-1">
+            If you see this purple gradient box, your UI upgrade is ready.
+          </p>
+        </div>
+      </div>
+
       {/* Navigation */}
       <nav style={{
         background: 'white',
