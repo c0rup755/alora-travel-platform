@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alora — Set Sail</title>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+--cream:     #f5f0e6;
+--parchment: #ede6d4;
+--warm:      #faf7f2;
+--ink:       #1a1714;
+--rust:      #b85c38;
+--rust-h:    #d06840;
+--teal:      #2a6b6e;
+--sand:      #c8b89a;
+--mist:      #8a8078;
+--gold:      #a8916a;
+--soft:      rgba(26,23,20,0.06);
+}
+
+/* ══════════════════════════════
+	 TOP PROMO BANNER
+══════════════════════════════ */
+.top-banner {
+	background: linear-gradient(90deg, var(--rust) 0%, var(--rust-h) 100%);
+	color: #fff;
+	padding: 10px 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	font-size: 11px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 10002;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.top-banner .banner-icon { font-size: 14px; }
+.top-banner .banner-text { font-weight: 500; }
+
+.top-banner .banner-link {
+	color: #fff;
+	text-decoration: none;
+	font-weight: 600;
+	white-space: nowrap;
+	transition: opacity 0.2s;
+	border-bottom: 1px dashed rgba(255,255,255,0.6);
+	padding-bottom: 2px;
+}
+.top-banner .banner-link:hover { opacity: 0.9; border-bottom-color: #fff; }
+
+.top-banner .banner-close {
+	position: absolute;
+	right: 20px;
+	background: none;
+	border: none;
+	color: rgba(255,255,255,0.7);
+	font-size: 18px;
+	cursor: pointer;
+	transition: color 0.2s;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+}
+.top-banner .banner-close:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.top-banner.hidden { display: none; }
+
+/* Adjust nav position when banner is visible */
+.nav { top: 40px !important; }
+
+/* Adjust page body spacing */
+body { padding-top: 40px; }
+
+/* Responsive banner */
+@media (max-width: 768px) {
+	.top-banner { 
+		flex-wrap: wrap; 
+		text-align: center; 
+		padding: 8px 16px; 
+		font-size: 10px; 
+	}
+	.top-banner .banner-close { right: 12px; top: 6px; }
+	.nav { top: 36px !important; }
+	body { padding-top: 36px; }
+}
+
+html { scroll-behavior: smooth; }
+body {
+background: var(--cream);
+color: var(--ink);
+font-family: 'DM Sans', sans-serif;
+min-height: 100vh;
+overflow-x: hidden;
+}
+body::after {
+content:''; position:fixed; inset:0; pointer-events:none; z-index:9000;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+/* NAV */
+.nav {
+position: sticky; top:0; z-index:10001;
+background: rgba(245,240,230,0.96);
+backdrop-filter: blur(14px);
+border-bottom: 1px solid rgba(26,23,20,0.08);
+display: flex; align-items: center;
+padding: 0 52px; height: 68px; gap: 32px;
+}
+.nav-logo {
+font-family: 'Italiana', serif;
+font-size: 24px; letter-spacing: 0.06em; color: var(--ink);
+white-space: nowrap; text-decoration: none;
+}
+.nav-logo span { color: var(--rust); }
+.nav-back {
+display: flex; align-items: center; gap: 8px;
+font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+color: var(--mist); cursor: pointer; border: none; background: none;
+font-family: 'DM Sans', sans-serif; transition: color .2s;
+text-decoration: none;
+}
+.nav-back:hover { color: var(--rust); }
+.nav-back::before { content: '←'; font-size: 14px; }
+.nav-divider { width:1px; height:28px; background: rgba(26,23,20,0.1); }
+.nav-route {
+display: flex; align-items: center; gap: 10px;
+font-family: 'Cormorant Garamond', serif;
+font-style: italic; font-size: 20px; color: var(--ink);
+}
+.nav-route-arrow { color: var(--rust); font-style: normal; font-size: 14px; }
+.nav-route-date {
+font-family: 'DM Sans', sans-serif; font-style: normal;
+font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+color: var(--mist); margin-left: 8px;
+}
+.nav-right { margin-left: auto; display:flex; align-items:center; gap:20px; }
+.nav-links { display:flex; gap:36px; list-style:none; margin:0; padding:0; }
+.nav-links a {
+text-decoration: none;
+color: var(--ink);
+font-size: 10px;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--rust); }
+nav { flex-wrap: nowrap; justify-content: space-between; }
+.nav-left { display:flex; align-items:center; gap:18px; }
+.nav-tag {
+font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+color: var(--mist);
+}
+.nav-cta {
+background: var(--rust); color:#fff; border:none;
+padding: 9px 22px; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.18em; text-transform:uppercase; cursor:pointer;
+transition: background .2s; text-decoration: none; display: inline-block;
+}
+.nav-cta:hover { background: var(--rust-h); }
+/* HERO */
+.hero-cruise {
+background: var(--ink);
+padding: 80px 52px;
+position: relative; overflow: hidden;
+text-align: center;
+}
+.hero-glow {
+position:absolute; inset:0; pointer-events:none;
+background:
+radial-gradient(ellipse at 5% 100%, rgba(184,92,56,.22) 0%, transparent 50%),
+radial-gradient(ellipse at 95% 0%, rgba(42,107,110,.15) 0%, transparent 50%);
+}
+.hero-label {
+font-size: 9px; letter-spacing:.3em; text-transform:uppercase;
+color: rgba(255,255,255,.3); margin-bottom: 16px;
+display:flex; align-items:center; justify-content:center; gap:10px;
+}
+.hero-label::before { content:''; display:block; width:24px; height:1px; background:var(--rust); }
+.hero-headline {
+font-family: 'Italiana', serif;
+font-size: clamp(48px,6vw,82px);
+color: #fff; line-height: .95; margin-bottom: 16px;
+}
+.hero-headline em { font-style: italic; color: var(--rust); }
+.hero-sub {
+font-size: 15px; color: rgba(255,255,255,.5);
+max-width: 600px; margin: 0 auto 32px;
+font-family: 'Cormorant Garamond', serif; font-style: italic;
+}
+.hero-stats {
+display: flex; justify-content: center; gap: 48px;
+margin-top: 40px;
+}
+.hs-stat { text-align: center; }
+.hs-num {
+font-family: 'Italiana', serif;
+font-size: 32px; color: var(--rust);
+line-height: 1;
+}
+.hs-label {
+font-size: 8px; letter-spacing:.25em; text-transform:uppercase;
+color: rgba(255,255,255,.3); margin-top: 4px;
+}
+/* SEARCH BAR */
+.search-bar {
+background: rgba(255,255,255,.04);
+border: 1px solid rgba(255,255,255,.08);
+display: grid;
+grid-template-columns: 1fr 1fr 1fr 1fr auto;
+gap: 0;
+margin-top: 40px;
+}
+.sb-field {
+padding: 18px 22px;
+border-right: 1px solid rgba(255,255,255,.07);
+cursor: pointer; transition: background .2s;
+display:flex; flex-direction:column; gap:4px;
+}
+.sb-field:hover { background: rgba(255,255,255,.05); }
+.sb-field:last-of-type { border-right:none; }
+.sb-label {
+font-size: 8px; letter-spacing:.25em; text-transform:uppercase;
+color: rgba(255,255,255,.3);
+}
+.sb-value {
+font-family: 'Cormorant Garamond', serif;
+font-style:italic; font-size:18px; color:rgba(255,255,255,.85);
+}
+.sb-sub {
+font-size: 9px; color:rgba(255,255,255,.3); letter-spacing:.1em;
+}
+.sb-btn {
+background: var(--rust); color:#fff; border:none;
+padding: 0 36px; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+cursor:pointer; transition:background .2s; white-space:nowrap;
+}
+.sb-btn:hover { background:var(--rust-h); }
+/* DESTINATION STRIP */
+.dest-strip {
+background: var(--parchment);
+padding: 20px 52px;
+display:flex; align-items:center; gap:16px;
+border-bottom: 1px solid rgba(26,23,20,.08);
+overflow-x: auto;
+}
+.dest-strip::-webkit-scrollbar { display:none; }
+.ds-label { font-size:8px; letter-spacing:.28em; text-transform:uppercase; color:var(--mist); white-space:nowrap; }
+.ds-btn {
+padding: 8px 18px; border:1px solid rgba(26,23,20,.15);
+background:transparent; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.12em; text-transform:uppercase;
+color: var(--mist); cursor:pointer; white-space:nowrap;
+transition: all .2s;
+}
+.ds-btn:hover, .ds-btn.active { border-color:var(--rust); color:var(--rust); background:rgba(184,92,56,.05); }
+/* PAGE BODY */
+.page-body {
+display: grid;
+grid-template-columns: 300px 1fr;
+gap: 0;
+min-height: calc(100vh - 68px);
+}
+/* SIDEBAR */
+.sidebar {
+background: var(--warm);
+border-right: 1px solid rgba(26,23,20,.08);
+padding: 36px 28px;
+position: sticky; top:68px;
+height: calc(100vh - 68px);
+overflow-y: auto;
+}
+.f-section { margin-bottom:36px; }
+.f-section-title {
+font-size:8px; letter-spacing:.28em; text-transform:uppercase;
+color:var(--mist); margin-bottom:16px;
+}
+.f-check-list { display:flex; flex-direction:column; gap:10px; }
+.f-check {
+display:flex; align-items:center; gap:10px; cursor:pointer;
+font-size:13px; color:var(--ink); transition:color .2s;
+}
+.f-check:hover { color:var(--rust); }
+.f-check input { display:none; }
+.f-box {
+width:16px; height:16px; border:1px solid var(--sand);
+display:flex; align-items:center; justify-content:center;
+flex-shrink:0; transition:border-color .2s, background .2s;
+}
+.f-check:hover .f-box { border-color:var(--rust); }
+.f-check input:checked ~ .f-box { background:var(--rust); border-color:var(--rust); }
+.f-check input:checked ~ .f-box::after { content:'✓'; font-size:9px; color:#fff; }
+.f-check-label { display:flex; justify-content:space-between; width:100%; }
+.f-check-count { font-size:10px; color:var(--mist); }
+.price-range { display:flex; flex-direction:column; gap:12px; }
+.price-slider {
+-webkit-appearance:none; appearance:none;
+width:100%; height:2px; background:var(--sand);
+outline:none; border-radius:2px; cursor:pointer;
+}
+.price-slider::-webkit-slider-thumb {
+-webkit-appearance:none; width:16px; height:16px;
+border-radius:50%; background:var(--rust); cursor:pointer;
+border:3px solid var(--warm); box-shadow:0 0 0 1px var(--rust);
+}
+.price-labels {
+display:flex; justify-content:space-between;
+font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px;
+color:var(--ink);
+}
+.price-sub { font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--mist); }
+.sidebar-promo {
+background: var(--ink); padding:24px 20px;
+margin-top:8px; position:relative; overflow:hidden;
+}
+.sp-glow {
+position:absolute; inset:0;
+background:radial-gradient(ellipse at 0% 100%, rgba(184,92,56,.25), transparent 60%);
+pointer-events:none;
+}
+.sp-eyebrow { font-size:8px; letter-spacing:.25em; text-transform:uppercase; color:var(--rust); margin-bottom:8px; }
+.sp-title { font-family:'Italiana',serif; font-size:22px; color:#fff; line-height:1.1; margin-bottom:10px; }
+.sp-desc { font-size:11px; color:rgba(255,255,255,.4); line-height:1.7; margin-bottom:16px; }
+.sp-btn {
+background:var(--rust); color:#fff; border:none;
+padding:9px 20px; font-size:9px; letter-spacing:.2em; text-transform:uppercase;
+cursor:pointer; font-family:'DM Sans',sans-serif; width:100%;
+}
+/* RESULTS */
+.results-area { padding: 28px 40px 60px; }
+.results-header {
+display:flex; align-items:center; justify-content:space-between;
+margin-bottom:24px;
+}
+.rh-count {
+font-family:'Italiana',serif; font-size:34px; color:var(--ink); line-height:1;
+}
+.rh-sub { font-size:11px; color:var(--mist); letter-spacing:.08em; margin-top:2px; }
+.rh-right { display:flex; align-items:center; gap:12px; }
+.sort-label { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--mist); }
+.sort-select {
+background:var(--warm); border:1px solid rgba(26,23,20,.12);
+padding:8px 16px; font-family:'Cormorant Garamond',serif; font-style:italic;
+font-size:15px; color:var(--ink); cursor:pointer; outline:none;
+}
+.alora-insight {
+background: var(--parchment);
+border-left: 3px solid var(--rust);
+padding: 16px 22px;
+margin-bottom: 24px;
+display:flex; align-items:center; gap:20px;
+}
+.ai-icon { font-size:20px; }
+.ai-headline { font-size:13px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+.ai-body { font-size:11px; color:var(--mist); line-height:1.6; }
+.ai-cta { margin-left:auto; white-space:nowrap; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--rust); cursor:pointer; border:none; background:none; font-family:'DM Sans',sans-serif; }
+.nudge-bar {
+background:rgba(42,107,110,.08);
+border:1px solid rgba(42,107,110,.15);
+padding:12px 20px; margin-bottom:10px;
+display:flex; align-items:center; gap:12px;
+}
+.nudge-icon { font-size:16px; }
+.nudge-text { font-size:12px; color:var(--teal); line-height:1.5; }
+.nudge-text strong { font-weight:500; }
+/* CRUISE CARDS */
+.cruise-list { display:flex; flex-direction:column; gap:20px; }
+.cruise-card {
+background: var(--warm);
+border: 1px solid rgba(26,23,20,.07);
+transition: border-color .25s, box-shadow .25s, transform .25s;
+cursor: pointer; position:relative; overflow:hidden;
+}
+.cruise-card:hover {
+border-color: rgba(184,92,56,.35);
+box-shadow: 0 4px 32px rgba(26,23,20,.08);
+transform: translateY(-1px);
+}
+.cruise-card.featured {
+border-color: rgba(184,92,56,.3);
+}
+.cruise-card.featured::before {
+content:''; position:absolute; left:0; top:0; bottom:0;
+width:3px; background:var(--rust);
+}
+.cc-inner {
+display: grid;
+grid-template-columns: 320px 1fr auto;
+gap: 0;
+}
+.cc-image {
+height: 240px;
+background: linear-gradient(180deg, #6a9eb4 0%, #5a8ea4 20%, #4a7e94 35%, #3a6e84 45%, #d4c4a8 50%, #c4b898 55%, #b4a888 60%, #e8d4b8 70%, #f0e0c8 80%, #e0d0b8 100%);
+position: relative;
+}
+.cc-badge {
+position: absolute; top: 16px; left: 16px;
+background: var(--rust); color: #fff;
+padding: 4px 12px; font-size: 8px;
+letter-spacing: .15em; text-transform: uppercase;
+z-index: 2;
+}
+.cc-route {
+position: absolute; bottom: 0; left: 0; right: 0;
+padding: 12px 16px;
+background: rgba(26,23,20,0.7);
+display: flex; gap: 8px; flex-wrap: wrap;
+}
+.cc-port {
+font-size: 10px; color: rgba(255,255,255,.8);
+}
+.cc-content {
+padding: 24px 28px;
+display: flex; flex-direction: column; gap: 12px;
+}
+.cc-name {
+font-family: 'Italiana', serif;
+font-size: 22px; color: var(--ink);
+line-height: 1.1;
+}
+.cc-route-info {
+font-size: 11px; color: var(--mist);
+letter-spacing: .12em; text-transform: uppercase;
+}
+.cc-days {
+display: flex; gap: 16px; margin-top: 8px;
+}
+.cc-day {
+font-size: 10px; color: var(--mist);
+}
+.cc-day strong { color: var(--ink); }
+.cc-desc {
+font-family: 'Cormorant Garamond', serif;
+font-style: italic; font-size: 15px;
+color: var(--mist); line-height: 1.6;
+}
+.cc-included {
+display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px;
+}
+.cc-include {
+font-size: 10px; color: var(--teal);
+display: flex; align-items: center; gap: 4px;
+}
+.cc-price-col {
+padding: 24px 28px;
+display: flex; flex-direction: column;
+align-items: flex-end; gap: 8px;
+min-width: 200px;
+border-left: 1px solid rgba(26,23,20,.06);
+}
+.cc-price-from { font-size: 8px; letter-spacing:.2em; text-transform:uppercase; color:var(--mist); }
+.cc-price {
+font-family:'Italiana',serif; font-size:38px; color:var(--ink); line-height:1;
+}
+.cc-price sup { font-size:16px; vertical-align:super; font-family:'DM Sans',sans-serif; font-weight:300; }
+.cc-price-per { font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--mist); }
+.cc-total { font-size: 11px; color: var(--mist); margin-top: 4px; }
+.cc-select-btn {
+background:var(--rust); color:#fff; border:none;
+padding: 10px 20px; font-family:'DM Sans',sans-serif;
+font-size:9px; letter-spacing:.2em; text-transform:uppercase; cursor:pointer;
+transition:background .2s; width:100%; text-align:center; margin-top: 8px;
+}
+.cc-select-btn:hover { background:var(--rust-h); }
+.cc-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top: 8px; }
+.cc-tag {
+font-size:8px; letter-spacing:.15em; text-transform:uppercase;
+padding:3px 9px; border:1px solid rgba(26,23,20,.15); color:var(--mist);
+}
+.load-more {
+text-align:center; padding:32px 0 0;
+}
+.load-btn {
+background:transparent; border:1px solid rgba(26,23,20,.2);
+padding:14px 48px; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+color:var(--mist); cursor:pointer; transition:all .2s;
+}
+.load-btn:hover { border-color:var(--rust); color:var(--rust); }
+/* RESPONSIVE */
+@media(max-width:1100px) {
+.page-body { grid-template-columns:260px 1fr; }
+}
+@media(max-width:900px) {
+nav { padding:0 20px; }
+.hero-cruise { padding: 60px 20px; }
+.search-bar { grid-template-columns:1fr 1fr; }
+.sb-btn { grid-column:span 2; padding:16px; }
+.dest-strip { padding:12px 20px; }
+.page-body { grid-template-columns:1fr; }
+.sidebar { display:none; }
+.results-area { padding:20px 20px 48px; }
+.cc-inner { grid-template-columns:1fr; }
+.cc-image { height: 180px; }
+.cc-price-col { border-left: none; border-top: 1px solid rgba(26,23,20,.06); padding-top: 20px; }
+.hero-stats { flex-wrap: wrap; gap: 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP PROMO BANNER -->
+<div class="top-banner">
+	<span class="banner-icon">✦</span>
+	<span class="banner-text">Spring in Europe is calling — Book by March 31st for 15% off Mediterranean journeys</span>
+	<a href="alora-planner.html" class="banner-link">Plan Your Escape →</a>
+	<button class="banner-close" onclick="this.parentElement.style.display='none'" aria-label="Close">×</button>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+<div class="nav-left">
+<a href="alora-homepage.html" class="nav-logo">Al<span>o</span>ra</a>
+<a href="alora-homepage.html" class="nav-back">All Travel</a>
+<div class="nav-divider"></div>
+<div class="nav-route">
+340 voyages <span class="nav-route-date">All oceans · All durations</span>
+</div>
+</div>
+<ul class="nav-links">
+<li><a href="alora-flights.html">Flights</a></li>
+<li><a href="alora-hotels.html">Hotels</a></li>
+<li><a href="alora-cruises.html">Cruises</a></li>
+<li><a href="alora-planner.html">Plan a Trip</a></li>
+	<li><a href="alora-homepage.html">Inspire Me</a></li>
+</ul>
+<div class="nav-right">
+<span class="nav-tag">340 itineraries</span>
+<a href="#" class="nav-cta">My Trips</a>
+</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero-cruise">
+<div class="hero-glow"></div>
+<div class="hero-label">Set Sail with Alora</div>
+<h1 class="hero-headline">The Ocean <em>Is Calling.</em></h1>
+<p class="hero-sub">From a $699 Caribbean weekend to a 120-day world circumnavigation — every soul deserves to feel the horizon. Alora sails with everyone.</p>
+<div class="search-bar">
+<div class="sb-field">
+<div class="sb-label">Destination</div>
+<div class="sb-value">All Oceans</div>
+<div class="sb-sub">Mediterranean · Caribbean · More</div>
+</div>
+<div class="sb-field">
+<div class="sb-label">Depart From</div>
+<div class="sb-value">Any Port</div>
+<div class="sb-sub">NYC · Miami · Barcelona</div>
+</div>
+<div class="sb-field">
+<div class="sb-label">Departure Date</div>
+<div class="sb-value">Flexible</div>
+<div class="sb-sub">Any time in 2026</div>
+</div>
+<div class="sb-field">
+<div class="sb-label">Duration</div>
+<div class="sb-value">Any Length</div>
+<div class="sb-sub">3 – 120 nights</div>
+</div>
+<button class="sb-btn">Search</button>
+</div>
+<div class="hero-stats">
+<div class="hs-stat">
+<div class="hs-num">340+</div>
+<div class="hs-label">Itineraries</div>
+</div>
+<div class="hs-stat">
+<div class="hs-num">68</div>
+<div class="hs-label">Countries</div>
+</div>
+<div class="hs-stat">
+<div class="hs-num">$699</div>
+<div class="hs-label">Starts From</div>
+</div>
+</div>
+</div>
+
+<!-- DESTINATION STRIP -->
+<div class="dest-strip">
+<span class="ds-label">Sail to</span>
+<button class="ds-btn active">🌊 Mediterranean</button>
+<button class="ds-btn">🌴 Caribbean</button>
+<button class="ds-btn">🌍 Northern Europe</button>
+<button class="ds-btn">🧊 Alaska & Arctic</button>
+<button class="ds-btn">🌏 Asia & Pacific</button>
+<button class="ds-btn">🌅 Middle East</button>
+<button class="ds-btn">🌎 South America</button>
+<button class="ds-btn">✦ World Voyage</button>
+</div>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+<div class="f-section">
+<div class="f-section-title">Duration</div>
+<div class="f-check-list">
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>1–5 nights</span><span class="f-check-count">48</span></div></label>
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>6–9 nights</span><span class="f-check-count">124</span></div></label>
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>10–14 nights</span><span class="f-check-count">98</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>15–30 nights</span><span class="f-check-count">52</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Grand Voyage 30+</span><span class="f-check-count">18</span></div></label>
+</div>
+</div>
+<div class="f-section">
+<div class="f-section-title">Budget per person <span style="color:var(--rust); cursor:pointer;">Reset</span></div>
+<div class="price-range">
+<input type="range" class="price-slider" min="499" max="28000" value="6000" oninput="document.getElementById('pval').textContent='$'+parseInt(this.value).toLocaleString()">
+<div class="price-labels">
+<span>$499</span>
+<span id="pval">$6,000</span>
+</div>
+<div class="price-sub">Showing all budgets · $699 to $28k+</div>
+</div>
+</div>
+<div class="f-section">
+<div class="f-section-title">Cruise Line</div>
+<div class="f-check-list">
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>Royal Caribbean</span><span class="f-check-count">48</span></div></label>
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>MSC Cruises</span><span class="f-check-count">42</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Norwegian</span><span class="f-check-count">38</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Viking</span><span class="f-check-count">22</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Silversea</span><span class="f-check-count">18</span></div></label>
+</div>
+</div>
+<div class="f-section">
+<div class="f-section-title">Cabin Type</div>
+<div class="f-check-list">
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>Interior</span><span class="f-check-count">240</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Ocean View</span><span class="f-check-count">198</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Balcony</span><span class="f-check-count">162</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Suite</span><span class="f-check-count">84</span></div></label>
+</div>
+</div>
+<div class="sidebar-promo">
+<div class="sp-glow"></div>
+<div class="sp-eyebrow">Alora Ocean Insight</div>
+<div class="sp-title">Mediterranean bookings peak in February for summer sailings</div>
+<div class="sp-desc">If you're eyeing July or August in the Med, the best cabins go 6 months out. You're looking at the right time.</div>
+<button class="sp-btn">Set a Voyage Alert</button>
+</div>
+</aside>
+
+<!-- RESULTS -->
+<div class="results-area">
+<div class="results-header">
+<div class="rh-left">
+<div class="rh-count">340 voyages</div>
+<div class="rh-sub">All oceans · All durations · All budgets</div>
+</div>
+<div class="rh-right">
+<span class="sort-label">Sort by</span>
+<select class="sort-select">
+<option>Alora Recommended</option>
+<option>Lowest price</option>
+<option>Departure date</option>
+<option>Duration (shortest)</option>
+<option>Highest rated</option>
+</select>
+</div>
+</div>
+
+<div class="alora-insight">
+<div class="ai-icon">🌊</div>
+<div class="ai-text">
+<div class="ai-headline">Spring is the sweet season to sail</div>
+<div class="ai-body">Mediterranean and Caribbean sailings in <strong>March–May</strong> are 18% cheaper than peak summer, with smaller crowds and the most spectacular light. Alora's top pick window.</div>
+</div>
+<button class="ai-cta">See spring voyages →</button>
+</div>
+
+<div class="nudge-bar">
+<div class="nudge-icon">⚓</div>
+<div class="nudge-text"><strong>28 travellers</strong> are browsing Mediterranean cruises right now. The Greek Isles sailing on Apr 12 has been viewed 14 times today — 4 balcony cabins remain.</div>
+</div>
+
+<!-- CRUISE CARDS -->
+<div class="cruise-list">
+<!-- Card 1 - Featured -->
+<div class="cruise-card featured">
+<div class="cc-inner">
+<div class="cc-image">
+<span class="cc-badge">Alora's Voyage Pick · 18% off this week</span>
+<div class="cc-route">
+<span class="cc-port">🇮🇹 Rome</span>
+<span class="cc-port">🇮🇹 Naples</span>
+<span class="cc-port">🇬🇷 Santorini</span>
+<span class="cc-port">🇬🇷 Athens</span>
+<span class="cc-port">🇭🇷 Dubrovnik</span>
+</div>
+</div>
+<div class="cc-content">
+<div class="cc-name">Greek Isles & Adriatic Discovery</div>
+<div class="cc-route-info">Mediterranean · MSC Cruises · 10 nights</div>
+<div class="cc-days">
+<span class="cc-day"><strong>10 nights</strong> Duration</span>
+<span class="cc-day"><strong>6 ports</strong> Destinations</span>
+<span class="cc-day"><strong>Apr 12</strong> Next Sailing</span>
+</div>
+<div class="cc-desc">"A ten-night symphony of whitewashed villages, ancient ruins, and Adriatic light. Wake up in a different world each morning — every one more beautiful than the last."</div>
+<div class="cc-included">
+<span class="cc-include">🍽 Meals included</span>
+<span class="cc-include">↩ Free cancellation</span>
+<span class="cc-include">🔥 Selling fast</span>
+</div>
+</div>
+<div class="cc-price-col">
+<div class="cc-price-from">from</div>
+<div class="cc-price"><sup>$</sup>1,240</div>
+<div class="cc-price-per">per person</div>
+<div class="cc-total">$2,480 total · 2 guests</div>
+<button class="cc-select-btn">View Cabins</button>
+</div>
+</div>
+</div>
+
+<!-- Card 2 -->
+<div class="cruise-card">
+<div class="cc-inner">
+<div class="cc-image" style="background: linear-gradient(180deg, #7ec8a0 0%, #6eb890 20%, #5ea880 35%, #4e9870 45%, #d8e8d0 50%, #c8d8c0 55%, #b8c8b0 60%, #e8f0e0 70%, #f0f8e8 80%, #e8f0e0 100%);">
+<div class="cc-route">
+<span class="cc-port">🇺🇸 Miami</span>
+<span class="cc-port">🇧🇸 Nassau</span>
+<span class="cc-port">🏝 CocoCay</span>
+</div>
+</div>
+<div class="cc-content">
+<div class="cc-name">Bahamas Long Weekend</div>
+<div class="cc-route-info">Caribbean · Royal Caribbean · 3 nights</div>
+<div class="cc-days">
+<span class="cc-day"><strong>3 nights</strong> Duration</span>
+<span class="cc-day"><strong>2 ports</strong> Destinations</span>
+<span class="cc-day"><strong>Mar 21</strong> Next Sailing</span>
+</div>
+<div class="cc-desc">"Three nights is all it takes. Leave on a Friday, return a Monday, and have a story worth telling for months. The most democratic luxury on earth."</div>
+<div class="cc-included">
+<span class="cc-include">💰 Budget Friendly</span>
+<span class="cc-include">↩ Free cancellation</span>
+</div>
+</div>
+<div class="cc-price-col">
+<div class="cc-price-from">from</div>
+<div class="cc-price"><sup>$</sup>699</div>
+<div class="cc-price-per">per person</div>
+<div class="cc-total">$1,398 total · 2 guests</div>
+<button class="cc-select-btn">View Cabins</button>
+</div>
+</div>
+</div>
+
+<!-- Card 3 -->
+<div class="cruise-card">
+<div class="cc-inner">
+<div class="cc-image" style="background: linear-gradient(180deg, #4a6e8e 0%, #3a5e7e 20%, #2a4e6e 35%, #1a3e5e 45%, #c8d8e8 50%, #b8c8d8 55%, #a8b8c8 60%, #d8e0e8 70%, #e0e8f0 80%, #d8e0e8 100%);">
+<span class="cc-badge" style="background: var(--teal);">✦ Alora Grand Collection</span>
+<div class="cc-route">
+<span class="cc-port">🇩🇰 Copenhagen</span>
+<span class="cc-port">🇳🇴 Bergen</span>
+<span class="cc-port">🇳🇴 Tromsø</span>
+<span class="cc-port">🇳🇴 Oslo</span>
+</div>
+</div>
+<div class="cc-content">
+<div class="cc-name">Norwegian Fjords & Northern Lights</div>
+<div class="cc-route-info">Nordic Fjords · Viking Cruises · 14 nights</div>
+<div class="cc-days">
+<span class="cc-day"><strong>14 nights</strong> Duration</span>
+<span class="cc-day"><strong>8 ports</strong> Destinations</span>
+<span class="cc-day"><strong>Jan – Mar</strong> Best Season</span>
+</div>
+<div class="cc-desc">"Standing under the Northern Lights in a fjord at midnight is one of those moments that rewires you. Viking's intimate ships get you close enough to feel it."</div>
+<div class="cc-included">
+<span class="cc-include">🥂 All inclusive</span>
+<span class="cc-include">↩ Free cancellation</span>
+</div>
+</div>
+<div class="cc-price-col">
+<div class="cc-price-from">from</div>
+<div class="cc-price"><sup>$</sup>3,490</div>
+<div class="cc-price-per">per person</div>
+<div class="cc-total">$6,980 total · 2 guests</div>
+<button class="cc-select-btn">View Cabins</button>
+</div>
+</div>
+</div>
+
+<!-- Card 4 -->
+<div class="cruise-card">
+<div class="cc-inner">
+<div class="cc-image" style="background: linear-gradient(180deg, #d4a870 0%, #c49860 20%, #b48850 35%, #a47840 45%, #f0e0c8 50%, #e0d0b8 55%, #d0c0a8 60%, #f8e8d0 70%, #fff0e0 80%, #f8e8d0 100%);">
+<div class="cc-route">
+<span class="cc-port">🇦🇪 Dubai</span>
+<span class="cc-port">🇦🇪 Abu Dhabi</span>
+<span class="cc-port">🇴🇲 Muscat</span>
+<span class="cc-port">🇮🇳 Goa</span>
+</div>
+</div>
+<div class="cc-content">
+<div class="cc-name">Arabia to India — Golden Route</div>
+<div class="cc-route-info">Arabia & India · Silversea · 12 nights</div>
+<div class="cc-days">
+<span class="cc-day"><strong>12 nights</strong> Duration</span>
+<span class="cc-day"><strong>5 ports</strong> Destinations</span>
+<span class="cc-day"><strong>Nov – Feb</strong> Best Season</span>
+</div>
+<div class="cc-desc">"From the gold towers of Dubai to the spice markets of Goa, this is civilisation at its most cinematic. Silversea makes you feel like you're the only ones who know."</div>
+<div class="cc-included">
+<span class="cc-include">💎 Ultra all-inclusive</span>
+<span class="cc-include">↩ Free cancellation</span>
+</div>
+</div>
+<div class="cc-price-col">
+<div class="cc-price-from">from</div>
+<div class="cc-price"><sup>$</sup>5,800</div>
+<div class="cc-price-per">per person</div>
+<div class="cc-total">$11,600 total · 2 guests</div>
+<button class="cc-select-btn">View Suites</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="load-more">
+<button class="load-btn">Load more voyages</button>
+</div>
+</div>
+</div>
+
+<script>
+// Destination strip toggle
+document.querySelectorAll('.ds-btn').forEach(b => {
+b.addEventListener('click', () => {
+document.querySelectorAll('.ds-btn').forEach(x => x.classList.remove('active'));
+b.classList.add('active');
+});
+});
+// Price slider
+const slider = document.querySelector('.price-slider');
+const pval = document.getElementById('pval');
+slider.addEventListener('input', () => {
+pval.textContent = '$' + parseInt(slider.value).toLocaleString();
+});
+</script>
+<script>
+// Banner close functionality
+document.addEventListener('DOMContentLoaded', function() {
+	const banner = document.querySelector('.top-banner');
+	const closeBtn = banner?.querySelector('.banner-close');
+  
+	if (closeBtn) {
+		closeBtn.addEventListener('click', function(e) {
+			e.preventDefault();
+			banner.classList.add('hidden');
+			document.body.style.paddingTop = '0';
+			const nav = document.querySelector('.nav');
+			if (nav) nav.style.top = '0';
+		});
+	}
+  
+	// Check localStorage for dismissed banner
+	if (localStorage.getItem('aloraBannerDismissed') === 'true' && banner) {
+		banner.classList.add('hidden');
+		document.body.style.paddingTop = '0';
+		const nav = document.querySelector('.nav');
+		if (nav) nav.style.top = '0';
+	}
+});
+</script>
+</body>
+</html>

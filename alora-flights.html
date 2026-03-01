@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alora — Find Your Flight</title>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+--cream:     #f5f0e6;
+--parchment: #ede6d4;
+--warm:      #faf7f2;
+--ink:       #1a1714;
+--rust:      #b85c38;
+--rust-h:    #d06840;
+--teal:      #2a6b6e;
+--sand:      #c8b89a;
+--mist:      #8a8078;
+--gold:      #a8916a;
+--soft:      rgba(26,23,20,0.06);
+}
+
+/* ══════════════════════════════
+	 TOP PROMO BANNER
+══════════════════════════════ */
+.top-banner {
+	background: linear-gradient(90deg, var(--rust) 0%, var(--rust-h) 100%);
+	color: #fff;
+	padding: 10px 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	font-size: 11px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 10002;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.top-banner .banner-icon { font-size: 14px; }
+.top-banner .banner-text { font-weight: 500; }
+
+.top-banner .banner-link {
+	color: #fff;
+	text-decoration: none;
+	font-weight: 600;
+	white-space: nowrap;
+	transition: opacity 0.2s;
+	border-bottom: 1px dashed rgba(255,255,255,0.6);
+	padding-bottom: 2px;
+}
+.top-banner .banner-link:hover { opacity: 0.9; border-bottom-color: #fff; }
+
+.top-banner .banner-close {
+	position: absolute;
+	right: 20px;
+	background: none;
+	border: none;
+	color: rgba(255,255,255,0.7);
+	font-size: 18px;
+	cursor: pointer;
+	transition: color 0.2s;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+}
+.top-banner .banner-close:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.top-banner.hidden { display: none; }
+
+/* Adjust nav position when banner is visible */
+.nav { top: 40px !important; }
+
+/* Adjust page body spacing */
+body { padding-top: 40px; }
+
+/* Responsive banner */
+@media (max-width: 768px) {
+	.top-banner { 
+		flex-wrap: wrap; 
+		text-align: center; 
+		padding: 8px 16px; 
+		font-size: 10px; 
+	}
+	.top-banner .banner-close { right: 12px; top: 6px; }
+	.nav { top: 36px !important; }
+	body { padding-top: 36px; }
+}
+
+html { scroll-behavior: smooth; }
+body {
+background: var(--cream);
+color: var(--ink);
+font-family: 'DM Sans', sans-serif;
+min-height: 100vh;
+overflow-x: hidden;
+}
+/* grain */
+body::after {
+content:''; position:fixed; inset:0; pointer-events:none; z-index:9000;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+/* ══ NAV ══ */
+.nav {
+position: sticky; top:0; z-index:10001;
+background: rgba(245,240,230,0.96);
+backdrop-filter: blur(14px);
+border-bottom: 1px solid rgba(26,23,20,0.08);
+display: flex; align-items: center;
+padding: 0 52px; height: 68px; gap: 32px;
+}
+.nav-logo {
+font-family: 'Italiana', serif;
+font-size: 24px; letter-spacing: 0.06em; color: var(--ink);
+white-space: nowrap; text-decoration: none;
+}
+.nav-logo span { color: var(--rust); }
+.nav-back {
+display: flex; align-items: center; gap: 8px;
+font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+color: var(--mist); cursor: pointer; border: none; background: none;
+font-family: 'DM Sans', sans-serif; transition: color .2s;
+text-decoration: none;
+}
+.nav-back:hover { color: var(--rust); }
+.nav-back::before { content: '←'; font-size: 14px; }
+.nav-divider { width:1px; height:28px; background: rgba(26,23,20,0.1); }
+.nav-route {
+display: flex; align-items: center; gap: 10px;
+font-family: 'Cormorant Garamond', serif;
+font-style: italic; font-size: 20px; color: var(--ink);
+}
+.nav-route-arrow { color: var(--rust); font-style: normal; font-size: 14px; }
+.nav-route-date {
+font-family: 'DM Sans', sans-serif; font-style: normal;
+font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+color: var(--mist); margin-left: 8px;
+}
+.nav-right { margin-left: auto; display:flex; align-items:center; gap:20px; }
+.nav-links { display:flex; gap:36px; list-style:none; margin:0; padding:0; }
+.nav-links a {
+text-decoration: none;
+color: var(--ink);
+font-size: 10px;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--rust); }
+nav { flex-wrap: nowrap; justify-content: space-between; }
+.nav-left { display:flex; align-items:center; gap:18px; }
+.nav-tag {
+font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+color: var(--mist);
+}
+.nav-cta {
+background: var(--rust); color:#fff; border:none;
+padding: 9px 22px; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.18em; text-transform:uppercase; cursor:pointer;
+transition: background .2s; text-decoration: none; display: inline-block;
+}
+.nav-cta:hover { background: var(--rust-h); }
+/* ══ SEARCH HERO BAND ══ */
+.search-hero {
+background: var(--ink);
+padding: 36px 52px 0;
+position: relative; overflow: hidden;
+}
+.sh-glow {
+position:absolute; inset:0; pointer-events:none;
+background:
+radial-gradient(ellipse at 5% 100%, rgba(184,92,56,.22) 0%, transparent 50%),
+radial-gradient(ellipse at 95% 0%, rgba(42,107,110,.15) 0%, transparent 50%);
+}
+.sh-label {
+font-size: 9px; letter-spacing:.3em; text-transform:uppercase;
+color: rgba(255,255,255,.3); margin-bottom: 10px;
+display:flex; align-items:center; gap:10px;
+}
+.sh-label::before { content:''; display:block; width:24px; height:1px; background:var(--rust); }
+.sh-headline {
+font-family: 'Italiana', serif;
+font-size: clamp(38px,4.5vw,62px);
+color: #fff; line-height: .95; margin-bottom: 28px;
+}
+.sh-headline em { font-style: italic; color: var(--rust); }
+/* search form */
+.search-form {
+display: grid;
+grid-template-columns: 1fr 1fr 180px 180px 130px auto;
+gap: 0;
+background: rgba(255,255,255,.04);
+border: 1px solid rgba(255,255,255,.08);
+margin-bottom: 0;
+}
+.sf-field {
+padding: 18px 22px;
+border-right: 1px solid rgba(255,255,255,.07);
+cursor: pointer; transition: background .2s;
+display:flex; flex-direction:column; gap:4px;
+}
+.sf-field:hover { background: rgba(255,255,255,.05); }
+.sf-field:last-of-type { border-right:none; }
+.sf-label {
+font-size: 8px; letter-spacing:.25em; text-transform:uppercase;
+color: rgba(255,255,255,.3);
+}
+.sf-value {
+font-family: 'Cormorant Garamond', serif;
+font-style:italic; font-size:18px; color:rgba(255,255,255,.85);
+}
+.sf-sub {
+font-size: 9px; color:rgba(255,255,255,.3); letter-spacing:.1em;
+}
+.sf-btn {
+background: var(--rust); color:#fff; border:none;
+padding: 0 28px; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+cursor:pointer; transition:background .2s; white-space:nowrap;
+}
+.sf-btn:hover { background:var(--rust-h); }
+/* trip-type tabs */
+.sh-tabs {
+display:flex; gap:0; margin-top:20px;
+border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.sh-tab {
+padding: 12px 24px; font-size:10px; letter-spacing:.18em; text-transform:uppercase;
+color: rgba(255,255,255,.35); cursor:pointer; border:none; background:none;
+font-family:'DM Sans',sans-serif; border-bottom:2px solid transparent;
+transition: color .2s, border-color .2s;
+}
+.sh-tab:hover { color:rgba(255,255,255,.65); }
+.sh-tab.active { color:var(--rust); border-bottom-color:var(--rust); }
+/* mood strip */
+.mood-strip {
+background: var(--parchment);
+padding: 16px 52px;
+display:flex; align-items:center; gap:12px;
+border-bottom: 1px solid rgba(26,23,20,.08);
+overflow-x: auto;
+}
+.mood-strip::-webkit-scrollbar { display:none; }
+.mood-label { font-size:8px; letter-spacing:.28em; text-transform:uppercase; color:var(--mist); white-space:nowrap; }
+.mood-btn {
+display:flex; align-items:center; gap:6px;
+padding: 7px 16px; border:1px solid rgba(26,23,20,.15);
+background:transparent; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.15em; text-transform:uppercase;
+color: var(--mist); cursor:pointer; white-space:nowrap;
+transition: all .2s;
+}
+.mood-btn:hover, .mood-btn.active { border-color:var(--rust); color:var(--rust); background:rgba(184,92,56,.05); }
+.mood-dot { width:6px; height:6px; border-radius:50%; background:currentColor; }
+/* ══ MAIN LAYOUT ══ */
+.page-body {
+display: grid;
+grid-template-columns: 300px 1fr;
+gap: 0;
+min-height: calc(100vh - 68px);
+}
+/* ══ FILTERS SIDEBAR ══ */
+.sidebar {
+background: var(--warm);
+border-right: 1px solid rgba(26,23,20,.08);
+padding: 36px 28px;
+position: sticky; top:68px;
+height: calc(100vh - 68px);
+overflow-y: auto;
+}
+.sidebar::-webkit-scrollbar { width:3px; }
+.sidebar::-webkit-scrollbar-thumb { background:var(--sand); }
+.f-section { margin-bottom:36px; }
+.f-section-title {
+font-size:8px; letter-spacing:.28em; text-transform:uppercase;
+color:var(--mist); margin-bottom:16px;
+display:flex; justify-content:space-between; align-items:center;
+}
+.f-clear { font-size:8px; letter-spacing:.15em; color:var(--rust); cursor:pointer; text-transform:uppercase; }
+/* price range */
+.price-range { display:flex; flex-direction:column; gap:12px; }
+.price-slider {
+-webkit-appearance:none; appearance:none;
+width:100%; height:2px; background:var(--sand);
+outline:none; border-radius:2px; cursor:pointer;
+}
+.price-slider::-webkit-slider-thumb {
+-webkit-appearance:none; width:16px; height:16px;
+border-radius:50%; background:var(--rust); cursor:pointer;
+border:3px solid var(--warm); box-shadow:0 0 0 1px var(--rust);
+}
+.price-labels {
+display:flex; justify-content:space-between;
+font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px;
+color:var(--ink);
+}
+.price-sub { font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--mist); }
+/* checkboxes */
+.f-check-list { display:flex; flex-direction:column; gap:10px; }
+.f-check {
+display:flex; align-items:center; gap:10px; cursor:pointer;
+font-size:13px; color:var(--ink); transition:color .2s;
+}
+.f-check:hover { color:var(--rust); }
+.f-check input { display:none; }
+.f-box {
+width:16px; height:16px; border:1px solid var(--sand);
+display:flex; align-items:center; justify-content:center;
+flex-shrink:0; transition:border-color .2s, background .2s;
+}
+.f-check:hover .f-box { border-color:var(--rust); }
+.f-check input:checked ~ .f-box { background:var(--rust); border-color:var(--rust); }
+.f-check input:checked ~ .f-box::after { content:'✓'; font-size:9px; color:#fff; }
+.f-check-label { display:flex; justify-content:space-between; width:100%; }
+.f-check-count { font-size:10px; color:var(--mist); }
+/* stops dots */
+.stop-options { display:flex; gap:8px; }
+.stop-opt {
+flex:1; padding:10px 8px; border:1px solid rgba(26,23,20,.12);
+text-align:center; cursor:pointer; transition:all .2s;
+font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--mist);
+}
+.stop-opt.active, .stop-opt:hover { border-color:var(--rust); color:var(--rust); background:rgba(184,92,56,.05); }
+/* time slots */
+.time-slots { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.time-slot {
+border:1px solid rgba(26,23,20,.1); padding:12px 10px;
+cursor:pointer; transition:all .2s;
+}
+.time-slot:hover, .time-slot.active { border-color:var(--rust); background:rgba(184,92,56,.04); }
+.ts-range { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:14px; color:var(--ink); }
+.ts-label { font-size:8px; letter-spacing:.15em; text-transform:uppercase; color:var(--mist); margin-top:2px; }
+/* sidebar promo */
+.sidebar-promo {
+background: var(--ink); padding:24px 20px;
+margin-top:8px; position:relative; overflow:hidden;
+}
+.sp-glow {
+position:absolute; inset:0;
+background:radial-gradient(ellipse at 0% 100%, rgba(184,92,56,.25), transparent 60%);
+pointer-events:none;
+}
+.sp-eyebrow { font-size:8px; letter-spacing:.25em; text-transform:uppercase; color:var(--rust); margin-bottom:8px; }
+.sp-title { font-family:'Italiana',serif; font-size:22px; color:#fff; line-height:1.1; margin-bottom:10px; }
+.sp-desc { font-size:11px; color:rgba(255,255,255,.4); line-height:1.7; margin-bottom:16px; }
+.sp-btn {
+background:var(--rust); color:#fff; border:none;
+padding:9px 20px; font-size:9px; letter-spacing:.2em; text-transform:uppercase;
+cursor:pointer; font-family:'DM Sans',sans-serif; width:100%;
+}
+/* ══ RESULTS AREA ══ */
+.results-area { padding: 28px 40px 60px; }
+/* results header */
+.results-header {
+display:flex; align-items:center; justify-content:space-between;
+margin-bottom:24px;
+}
+.rh-left {}
+.rh-count {
+font-family:'Italiana',serif; font-size:34px; color:var(--ink); line-height:1;
+}
+.rh-sub { font-size:11px; color:var(--mist); letter-spacing:.08em; margin-top:2px; }
+.rh-right { display:flex; align-items:center; gap:12px; }
+.sort-label { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--mist); }
+.sort-select {
+background:var(--warm); border:1px solid rgba(26,23,20,.12);
+padding:8px 16px; font-family:'Cormorant Garamond',serif; font-style:italic;
+font-size:15px; color:var(--ink); cursor:pointer; outline:none;
+appearance:none; padding-right:28px;
+}
+/* alora insight banner */
+.alora-insight {
+background: var(--parchment);
+border-left: 3px solid var(--rust);
+padding: 16px 22px;
+margin-bottom: 24px;
+display:flex; align-items:center; gap:20px;
+}
+.ai-icon { font-size:20px; }
+.ai-text {}
+.ai-headline { font-size:13px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+.ai-body { font-size:11px; color:var(--mist); line-height:1.6; }
+.ai-cta { margin-left:auto; white-space:nowrap; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--rust); cursor:pointer; border:none; background:none; font-family:'DM Sans',sans-serif; }
+/* ══ FLIGHT CARDS ══ */
+.flight-list { display:flex; flex-direction:column; gap:10px; }
+.flight-card {
+background: var(--warm);
+border: 1px solid rgba(26,23,20,.07);
+transition: border-color .25s, box-shadow .25s, transform .25s;
+cursor: pointer; position:relative; overflow:hidden;
+}
+.flight-card:hover {
+border-color: rgba(184,92,56,.35);
+box-shadow: 0 4px 32px rgba(26,23,20,.08);
+transform: translateY(-1px);
+}
+.flight-card.featured {
+border-color: rgba(184,92,56,.3);
+background: var(--warm);
+}
+.flight-card.featured::before {
+content:''; position:absolute; left:0; top:0; bottom:0;
+width:3px; background:var(--rust);
+}
+.fc-inner {
+display: grid;
+grid-template-columns: auto 1fr auto auto;
+align-items: center;
+gap: 0; padding: 0;
+}
+/* airline col */
+.fc-airline {
+padding: 24px 24px;
+border-right: 1px solid rgba(26,23,20,.06);
+display:flex; flex-direction:column; align-items:center;
+gap:8px; min-width: 110px;
+}
+.fc-airline-logo {
+width:38px; height:38px; border-radius:50%;
+display:flex; align-items:center; justify-content:center;
+font-size:16px; font-weight:700;
+font-family:'DM Sans',sans-serif;
+}
+.logo-a { background:rgba(42,107,110,.12); color:var(--teal); }
+.logo-b { background:rgba(184,92,56,.1); color:var(--rust); }
+.logo-c { background:rgba(26,23,20,.08); color:var(--ink); }
+.logo-d { background:rgba(168,145,106,.15); color:var(--gold); }
+.logo-e { background:rgba(138,128,120,.12); color:var(--mist); }
+.fc-airline-name { font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--mist); }
+/* route col */
+.fc-route {
+padding: 24px 32px;
+display:flex; align-items:center; gap:20px;
+}
+.fc-city { text-align:center; }
+.fc-time {
+font-family:'Italiana',serif; font-size:30px; color:var(--ink);
+line-height:1; margin-bottom:2px;
+}
+.fc-iata { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--mist); }
+.fc-path {
+flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;
+padding: 0 12px;
+}
+.fc-duration { font-size:9px; letter-spacing:.18em; text-transform:uppercase; color:var(--mist); }
+.fc-line {
+width:100%; height:1px; background:var(--sand); position:relative;
+display:flex; align-items:center; justify-content:center;
+}
+.fc-line::before { content:'✈'; font-size:11px; color:var(--rust); background:var(--warm); padding:0 6px; }
+.fc-stops { font-size:9px; letter-spacing:.12em; color:var(--mist); }
+.fc-stops.direct { color:var(--teal); }
+/* details col */
+.fc-details {
+padding: 24px 24px;
+border-left: 1px solid rgba(26,23,20,.06);
+border-right: 1px solid rgba(26,23,20,.06);
+display:flex; flex-direction:column; gap:8px; min-width:140px;
+}
+.fc-detail-row { display:flex; align-items:center; gap:8px; }
+.fc-detail-icon { font-size:12px; opacity:.5; }
+.fc-detail-text { font-size:11px; color:var(--mist); }
+/* price col */
+.fc-price-col {
+padding: 24px 28px;
+display:flex; flex-direction:column; align-items:flex-end; gap:8px; min-width:160px;
+}
+.fc-price-from { font-size:8px; letter-spacing:.2em; text-transform:uppercase; color:var(--mist); }
+.fc-price {
+font-family:'Italiana',serif; font-size:38px; color:var(--ink); line-height:1;
+}
+.fc-price sup { font-size:16px; vertical-align:super; font-family:'DM Sans',sans-serif; font-weight:300; }
+.fc-price-per { font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--mist); }
+.fc-select-btn {
+background:var(--rust); color:#fff; border:none;
+padding: 10px 20px; font-family:'DM Sans',sans-serif;
+font-size:9px; letter-spacing:.2em; text-transform:uppercase; cursor:pointer;
+transition:background .2s; width:100%; text-align:center;
+}
+.fc-select-btn:hover { background:var(--rust-h); }
+/* tags */
+.fc-tags { display:flex; gap:6px; flex-wrap:wrap; }
+.fc-tag {
+font-size:8px; letter-spacing:.15em; text-transform:uppercase;
+padding:3px 9px; border:1px solid;
+}
+.tag-best   { border-color:rgba(42,107,110,.3); color:var(--teal); }
+.tag-cheap  { border-color:rgba(184,92,56,.3); color:var(--rust); }
+.tag-fast   { border-color:rgba(168,145,106,.3); color:var(--gold); }
+.tag-flex   { border-color:rgba(138,128,120,.3); color:var(--mist); }
+.tag-eco    { border-color:rgba(42,107,110,.3); color:var(--teal); }
+/* expanded row */
+.fc-expand {
+max-height:0; overflow:hidden; transition:max-height .4s ease;
+border-top:0 solid rgba(26,23,20,.06);
+}
+.fc-expand.open { max-height:300px; border-top-width:1px; }
+.fc-expand-inner {
+padding:20px 24px;
+display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:20px;
+}
+.fc-exp-group {}
+.fc-exp-label { font-size:8px; letter-spacing:.22em; text-transform:uppercase; color:var(--mist); margin-bottom:8px; }
+.fc-exp-val { font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px; color:var(--ink); }
+.fc-exp-sub { font-size:10px; color:var(--mist); margin-top:2px; }
+/* cabin selector */
+.cabin-selector { display:flex; gap:6px; }
+.cabin-opt {
+flex:1; padding:8px 6px; border:1px solid rgba(26,23,20,.1);
+text-align:center; cursor:pointer; transition:all .2s; font-size:9px;
+letter-spacing:.1em; text-transform:uppercase; color:var(--mist);
+}
+.cabin-opt.active, .cabin-opt:hover { border-color:var(--rust); color:var(--rust); }
+/* ══ FARE CALENDAR ══ */
+.fare-calendar {
+background:var(--ink); padding:28px 32px;
+margin-bottom:24px; position:relative; overflow:hidden;
+}
+.fare-cal-glow {
+position:absolute; inset:0; pointer-events:none;
+background:radial-gradient(ellipse at 100% 50%, rgba(42,107,110,.15), transparent 60%);
+}
+.fare-cal-header {
+display:flex; align-items:center; justify-content:space-between; margin-bottom:20px;
+}
+.fare-cal-title {
+font-family:'Italiana',serif; font-size:24px; color:#fff;
+}
+.fare-cal-sub { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.3); margin-top:2px; }
+.fare-cal-nav { display:flex; gap:8px; }
+.fare-cal-nav button {
+background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+color:rgba(255,255,255,.5); width:32px; height:32px; cursor:pointer;
+transition:all .2s; font-size:14px;
+}
+.fare-cal-nav button:hover { background:rgba(255,255,255,.1); color:#fff; }
+.fare-days {
+display:grid; grid-template-columns:repeat(7,1fr); gap:4px;
+}
+.fare-day-header {
+text-align:center; font-size:8px; letter-spacing:.2em; text-transform:uppercase;
+color:rgba(255,255,255,.25); padding-bottom:8px;
+}
+.fare-day {
+padding:10px 6px; text-align:center; cursor:pointer;
+border:1px solid transparent; transition:all .2s; border-radius:0;
+}
+.fare-day:hover { border-color:rgba(255,255,255,.2); background:rgba(255,255,255,.04); }
+.fare-day.active { border-color:var(--rust); background:rgba(184,92,56,.1); }
+.fare-day.today { border-color:rgba(255,255,255,.15); }
+.fd-num { font-size:12px; color:rgba(255,255,255,.7); margin-bottom:4px; }
+.fd-price { font-size:9px; font-family:'Space Mono',monospace; }
+.fd-price.low  { color:#7ec8a0; }
+.fd-price.med  { color:rgba(255,255,255,.4); }
+.fd-price.high { color:rgba(184,92,56,.7); }
+.fare-day.empty { cursor:default; }
+.fare-day.empty:hover { border-color:transparent; background:transparent; }
+/* ══ PSYCHOLOGY NUDGES ══ */
+.nudge-bar {
+background:rgba(42,107,110,.08);
+border:1px solid rgba(42,107,110,.15);
+padding:12px 20px; margin-bottom:10px;
+display:flex; align-items:center; gap:12px;
+}
+.nudge-icon { font-size:16px; }
+.nudge-text { font-size:12px; color:var(--teal); line-height:1.5; }
+.nudge-text strong { font-weight:500; }
+/* ══ LOAD MORE ══ */
+.load-more {
+text-align:center; padding:32px 0 0;
+}
+.load-btn {
+background:transparent; border:1px solid rgba(26,23,20,.2);
+padding:14px 48px; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+color:var(--mist); cursor:pointer; transition:all .2s;
+}
+.load-btn:hover { border-color:var(--rust); color:var(--rust); }
+/* ══ ANIMATIONS ══ */
+@keyframes fadeSlideUp {
+from { opacity:0; transform:translateY(16px); }
+to   { opacity:1; transform:translateY(0); }
+}
+.flight-card {
+animation: fadeSlideUp .45s ease both;
+}
+.flight-card:nth-child(1) { animation-delay:.05s; }
+.flight-card:nth-child(2) { animation-delay:.10s; }
+.flight-card:nth-child(3) { animation-delay:.15s; }
+.flight-card:nth-child(4) { animation-delay:.20s; }
+.flight-card:nth-child(5) { animation-delay:.25s; }
+.flight-card:nth-child(6) { animation-delay:.30s; }
+.flight-card:nth-child(7) { animation-delay:.35s; }
+/* ══ RESPONSIVE ══ */
+@media(max-width:1100px) {
+.page-body { grid-template-columns:260px 1fr; }
+}
+@media(max-width:900px) {
+.nav { padding:0 20px; }
+.nav .nav-route-date, .nav .nav-tag { display:none; }
+.search-hero { padding:28px 20px 0; }
+.search-form { grid-template-columns:1fr 1fr; }
+.sf-btn { grid-column:span 2; padding:16px; }
+.mood-strip { padding:12px 20px; }
+.page-body { grid-template-columns:1fr; }
+.sidebar { display:none; }
+.results-area { padding:20px 20px 48px; }
+.fc-inner { grid-template-columns:auto 1fr auto; }
+.fc-details { display:none; }
+.fc-expand-inner { grid-template-columns:1fr 1fr; }
+}
+/* Mobile nav toggle styles */
+.nav-toggle{display:none;border:0;background:transparent;width:44px;height:44px;align-items:center;justify-content:center;cursor:pointer}
+.nav-toggle .hamburger{display:inline-block;width:20px;height:2px;background:var(--ink);position:relative}
+.nav-toggle .hamburger::before,.nav-toggle .hamburger::after{content:'';position:absolute;left:0;background:var(--ink);width:20px;height:2px;transition:transform .22s ease,opacity .2s ease}
+.nav-toggle .hamburger::before{top:-6px}
+.nav-toggle .hamburger::after{top:6px}
+nav.open .nav-toggle .hamburger{background:transparent}
+nav.open .nav-toggle .hamburger::before{transform:rotate(45deg) translate(4px,4px)}
+nav.open .nav-toggle .hamburger::after{transform:rotate(-45deg) translate(4px,-4px)}
+@media(max-width:900px){
+.nav-toggle{display:flex}
+.nav-back,.nav-route,.nav-right{display:none}
+nav.open .nav-back, nav.open .nav-route, nav.open .nav-right{display:flex;flex-direction:column;gap:8px;padding:12px 20px;background:var(--cream);width:100%}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP PROMO BANNER -->
+<div class="top-banner">
+	<span class="banner-icon">✦</span>
+	<span class="banner-text">Spring in Europe is calling — Book by March 31st for 15% off Mediterranean journeys</span>
+	<a href="alora-planner.html" class="banner-link">Plan Your Escape →</a>
+	<button class="banner-close" onclick="this.parentElement.style.display='none'" aria-label="Close">×</button>
+</div>
+<!-- NAV -->
+<nav class="nav" id="nav">
+<div class="nav-left">
+<a href="alora-homepage.html" class="nav-logo">Al<span>o</span>ra</a>
+<button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-label="Open navigation">
+<span class="hamburger" aria-hidden="true"></span>
+</button>
+<a href="alora-homepage.html" class="nav-back">All Travel</a>
+<div class="nav-divider"></div>
+<div class="nav-route">
+New York <span class="nav-route-arrow">→</span> Rome
+<span class="nav-route-date">Mar 14 – Mar 24 · 2 Adults</span>
+</div>
+</div>
+<ul class="nav-links">
+<li><a href="alora-flights.html">Flights</a></li>
+<li><a href="alora-hotels.html">Hotels</a></li>
+<li><a href="alora-cruises.html">Cruises</a></li>
+<li><a href="alora-planner.html">Plan a Trip</a></li>
+	<li><a href="alora-homepage.html">Inspire Me</a></li>
+</ul>
+<div class="nav-right">
+<span class="nav-tag">247 flights found</span>
+<a href="#" class="nav-cta">My Trips</a>
+</div>
+</nav>
+
+<!-- SEARCH HERO -->
+<div class="search-hero">
+<div class="sh-glow"></div>
+<div class="sh-label">Flight Search</div>
+<h1 class="sh-headline">New York <em>→</em> Rome</h1>
+<div class="search-form">
+<div class="sf-field">
+<div class="sf-label">From</div>
+<div class="sf-value">New York</div>
+<div class="sf-sub">JFK · LGA · EWR</div>
+</div>
+<div class="sf-field">
+<div class="sf-label">To</div>
+<div class="sf-value">Rome, Italy</div>
+<div class="sf-sub">FCO · CIA</div>
+</div>
+<div class="sf-field">
+<div class="sf-label">Depart</div>
+<div class="sf-value">Mar 14</div>
+<div class="sf-sub">Friday</div>
+</div>
+<div class="sf-field">
+<div class="sf-label">Return</div>
+<div class="sf-value">Mar 24</div>
+<div class="sf-sub">Monday</div>
+</div>
+<div class="sf-field">
+<div class="sf-label">Travellers</div>
+<div class="sf-value">2 Adults</div>
+<div class="sf-sub">Economy</div>
+</div>
+<button class="sf-btn">Search</button>
+</div>
+<div class="sh-tabs">
+<button class="sh-tab active">Round Trip</button>
+<button class="sh-tab">One Way</button>
+<button class="sh-tab">Multi-City</button>
+<button class="sh-tab">✦ Flexible Dates</button>
+</div>
+</div>
+
+<!-- MOOD FILTER STRIP -->
+<div class="mood-strip">
+<span class="mood-label">I want to</span>
+<button class="mood-btn active"><span class="mood-dot"></span>Arrive rested</button>
+<button class="mood-btn"><span class="mood-dot"></span>Spend less</button>
+<button class="mood-btn"><span class="mood-dot"></span>Fly direct</button>
+<button class="mood-btn"><span class="mood-dot"></span>Depart at dawn</button>
+<button class="mood-btn"><span class="mood-dot"></span>Fly premium</button>
+<button class="mood-btn"><span class="mood-dot"></span>Most flexible</button>
+<button class="mood-btn"><span class="mood-dot"></span>Eco-conscious</button>
+</div>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+<!-- Price -->
+<div class="f-section">
+<div class="f-section-title">Price per person <span class="f-clear">Reset</span></div>
+<div class="price-range">
+<input type="range" class="price-slider" min="200" max="3000" value="1800" oninput="document.getElementById('pval').textContent='$'+this.value">
+<div class="price-labels">
+<span>$200</span>
+<span id="pval">$1,800</span>
+</div>
+<div class="price-sub">Showing all budgets</div>
+</div>
+</div>
+<!-- Stops -->
+<div class="f-section">
+<div class="f-section-title">Stops</div>
+<div class="stop-options">
+<div class="stop-opt active">Any</div>
+<div class="stop-opt">Direct</div>
+<div class="stop-opt">1 Stop</div>
+<div class="stop-opt">2+</div>
+</div>
+</div>
+<!-- Airlines -->
+<div class="f-section">
+<div class="f-section-title">Airlines <span class="f-clear">All</span></div>
+<div class="f-check-list">
+<label class="f-check">
+<input type="checkbox" checked>
+<div class="f-box"></div>
+<div class="f-check-label"><span>Alitalia</span><span class="f-check-count">32</span></div>
+</label>
+<label class="f-check">
+<input type="checkbox" checked>
+<div class="f-box"></div>
+<div class="f-check-label"><span>Delta</span><span class="f-check-count">28</span></div>
+</label>
+<label class="f-check">
+<input type="checkbox">
+<div class="f-box"></div>
+<div class="f-check-label"><span>Lufthansa</span><span class="f-check-count">21</span></div>
+</label>
+<label class="f-check">
+<input type="checkbox">
+<div class="f-box"></div>
+<div class="f-check-label"><span>British Airways</span><span class="f-check-count">18</span></div>
+</label>
+<label class="f-check">
+<input type="checkbox">
+<div class="f-box"></div>
+<div class="f-check-label"><span>Emirates</span><span class="f-check-count">14</span></div>
+</label>
+<label class="f-check">
+<input type="checkbox">
+<div class="f-box"></div>
+<div class="f-check-label"><span>ITA Airways</span><span class="f-check-count">11</span></div>
+</label>
+</div>
+</div>
+<!-- Departure time -->
+<div class="f-section">
+<div class="f-section-title">Departure time</div>
+<div class="time-slots">
+<div class="time-slot active">
+<div class="ts-range">5am – 12pm</div>
+<div class="ts-label">Morning</div>
+</div>
+<div class="time-slot">
+<div class="ts-range">12pm – 6pm</div>
+<div class="ts-label">Afternoon</div>
+</div>
+<div class="time-slot">
+<div class="ts-range">6pm – 12am</div>
+<div class="ts-label">Evening</div>
+</div>
+<div class="time-slot">
+<div class="ts-range">12am – 5am</div>
+<div class="ts-label">Overnight</div>
+</div>
+</div>
+</div>
+<!-- Layover -->
+<div class="f-section">
+<div class="f-section-title">Layover airports</div>
+<div class="f-check-list">
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>Frankfurt (FRA)</span><span class="f-check-count">24</span></div></label>
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>London (LHR)</span><span class="f-check-count">19</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Amsterdam (AMS)</span><span class="f-check-count">15</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Paris (CDG)</span><span class="f-check-count">12</span></div></label>
+</div>
+</div>
+<!-- Alora Sidebar Promo -->
+<div class="sidebar-promo">
+<div class="sp-glow"></div>
+<div class="sp-eyebrow">Alora Insight</div>
+<div class="sp-title">Prices drop 14% on Tuesdays for this route</div>
+<div class="sp-desc">Set a fare alert and we'll tell you the perfect moment to book — no guesswork.</div>
+<button class="sp-btn">Set Fare Alert</button>
+</div>
+</aside>
+
+<!-- RESULTS -->
+<div class="results-area">
+<!-- Header -->
+<div class="results-header">
+<div class="rh-left">
+<div class="rh-count">247 flights</div>
+<div class="rh-sub">New York → Rome · Mar 14 – Mar 24 · 2 adults</div>
+</div>
+<div class="rh-right">
+<span class="sort-label">Sort by</span>
+<select class="sort-select">
+<option>Best value</option>
+<option>Lowest price</option>
+<option>Fastest</option>
+<option>Departs earliest</option>
+</select>
+</div>
+</div>
+
+<!-- Alora AI Insight Banner -->
+<div class="alora-insight">
+<div class="ai-icon">✦</div>
+<div class="ai-text">
+<div class="ai-headline">Alora sees something worth knowing</div>
+<div class="ai-body">Prices for this route are <strong>12% below average</strong> right now. The last 3 years say March 14th departures rarely get cheaper — this is your moment.</div>
+</div>
+<button class="ai-cta">See price history →</button>
+</div>
+
+<!-- Psychology nudge -->
+<div class="nudge-bar">
+<div class="nudge-icon">👁</div>
+<div class="nudge-text"><strong>34 people</strong> are viewing New York → Rome flights right now. The Delta direct at 7:45pm has been selected 6 times today.</div>
+</div>
+
+<!-- FARE CALENDAR -->
+<div class="fare-calendar">
+<div class="fare-cal-glow"></div>
+<div class="fare-cal-header">
+<div>
+<div class="fare-cal-title">Fare Calendar — March 2026</div>
+<div class="fare-cal-sub">Click any date to see available flights</div>
+</div>
+<div class="fare-cal-nav">
+<button>‹</button>
+<button>›</button>
+</div>
+</div>
+<div class="fare-days">
+<div class="fare-day-header">Sun</div>
+<div class="fare-day-header">Mon</div>
+<div class="fare-day-header">Tue</div>
+<div class="fare-day-header">Wed</div>
+<div class="fare-day-header">Thu</div>
+<div class="fare-day-header">Fri</div>
+<div class="fare-day-header">Sat</div>
+<!-- Row 1 -->
+<div class="fare-day empty"></div>
+<div class="fare-day empty"></div>
+<div class="fare-day empty"></div>
+<div class="fare-day empty"></div>
+<div class="fare-day empty"></div>
+<div class="fare-day empty"></div>
+<div class="fare-day"><div class="fd-num">1</div><div class="fd-price med">$820</div></div>
+<!-- Row 2 -->
+<div class="fare-day"><div class="fd-num">2</div><div class="fd-price high">$1,240</div></div>
+<div class="fare-day"><div class="fd-num">3</div><div class="fd-price med">$760</div></div>
+<div class="fare-day"><div class="fd-num">4</div><div class="fd-price low">$620</div></div>
+<div class="fare-day"><div class="fd-num">5</div><div class="fd-price low">$598</div></div>
+<div class="fare-day"><div class="fd-num">6</div><div class="fd-price low">$612</div></div>
+<div class="fare-day"><div class="fd-num">7</div><div class="fd-price med">$710</div></div>
+<div class="fare-day"><div class="fd-num">8</div><div class="fd-price high">$980</div></div>
+<!-- Row 3 -->
+<div class="fare-day"><div class="fd-num">9</div><div class="fd-price high">$1,100</div></div>
+<div class="fare-day"><div class="fd-num">10</div><div class="fd-price med">$740</div></div>
+<div class="fare-day"><div class="fd-num">11</div><div class="fd-price low">$580</div></div>
+<div class="fare-day"><div class="fd-num">12</div><div class="fd-price low">$565</div></div>
+<div class="fare-day"><div class="fd-num">13</div><div class="fd-price med">$699</div></div>
+<div class="fare-day active"><div class="fd-num">14</div><div class="fd-price low">$612</div></div>
+<div class="fare-day"><div class="fd-num">15</div><div class="fd-price high">$890</div></div>
+<!-- Row 4 -->
+<div class="fare-day"><div class="fd-num">16</div><div class="fd-price high">$1,050</div></div>
+<div class="fare-day"><div class="fd-num">17</div><div class="fd-price low">$590</div></div>
+<div class="fare-day"><div class="fd-num">18</div><div class="fd-price low">$545</div></div>
+<div class="fare-day"><div class="fd-num">19</div><div class="fd-price low">$530</div></div>
+<div class="fare-day"><div class="fd-num">20</div><div class="fd-price med">$720</div></div>
+<div class="fare-day"><div class="fd-num">21</div><div class="fd-price med">$755</div></div>
+<div class="fare-day"><div class="fd-num">22</div><div class="fd-price high">$1,180</div></div>
+</div>
+</div>
+
+<!-- FLIGHT CARDS -->
+<div class="flight-list">
+<!-- Card 1 — Featured / Best Value -->
+<div class="flight-card featured" onclick="toggleExpand(this)">
+<div class="fc-inner">
+<div class="fc-airline">
+<div class="fc-airline-logo logo-a">Δ</div>
+<div class="fc-airline-name">Delta</div>
+</div>
+<div class="fc-route">
+<div class="fc-city">
+<div class="fc-time">07:45</div>
+<div class="fc-iata">JFK</div>
+</div>
+<div class="fc-path">
+<div class="fc-duration">8h 30m</div>
+<div class="fc-line"></div>
+<div class="fc-stops direct">Direct</div>
+</div>
+<div class="fc-city">
+<div class="fc-time">21:15</div>
+<div class="fc-iata">FCO</div>
+</div>
+</div>
+<div class="fc-details">
+<div class="fc-tags">
+<span class="fc-tag tag-best">Best Value</span>
+<span class="fc-tag tag-fast">Fastest</span>
+</div>
+<div class="fc-detail-row"><span class="fc-detail-icon">🧳</span><span class="fc-detail-text">1 bag included</span></div>
+<div class="fc-detail-row"><span class="fc-detail-icon">🍽</span><span class="fc-detail-text">Meal included</span></div>
+<div class="fc-detail-row"><span class="fc-detail-icon">↩</span><span class="fc-detail-text">Free changes</span></div>
+</div>
+<div class="fc-price-col">
+<div class="fc-price-from">from</div>
+<div class="fc-price"><sup>$</sup>612</div>
+<div class="fc-price-per">per person</div>
+<button class="fc-select-btn">Select Flight</button>
+</div>
+</div>
+<div class="fc-expand">
+<div class="fc-expand-inner">
+<div class="fc-exp-group">
+<div class="fc-exp-label">Cabin class</div>
+<div class="cabin-selector">
+<div class="cabin-opt active">Eco</div>
+<div class="cabin-opt">Plus</div>
+<div class="cabin-opt">Biz</div>
+<div class="cabin-opt">First</div>
+</div>
+</div>
+<div class="fc-exp-group">
+<div class="fc-exp-label">Aircraft</div>
+<div class="fc-exp-val">Boeing 767-400</div>
+<div class="fc-exp-sub">Wide-body · 2-3-2 config</div>
+</div>
+<div class="fc-exp-group">
+<div class="fc-exp-label">Baggage</div>
+<div class="fc-exp-val">1 × 23kg included</div>
+<div class="fc-exp-sub">+1 carry-on · Personal item</div>
+</div>
+<div class="fc-exp-group">
+<div class="fc-exp-label">Flexibility</div>
+<div class="fc-exp-val">Free date change</div>
+<div class="fc-exp-sub">Cancel for $120 fee</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- Card 2 -->
+<div class="flight-card" onclick="toggleExpand(this)">
+<div class="fc-inner">
+<div class="fc-airline">
+<div class="fc-airline-logo logo-b">ITA</div>
+<div class="fc-airline-name">ITA Airways</div>
+</div>
+<div class="fc-route">
+<div class="fc-city">
+<div class="fc-time">22:10</div>
+<div class="fc-iata">JFK</div>
+</div>
+<div class="fc-path">
+<div class="fc-duration">9h 05m</div>
+<div class="fc-line"></div>
+<div class="fc-stops direct">Direct</div>
+</div>
+<div class="fc-city">
+<div class="fc-time">12:15</div>
+<div class="fc-iata">FCO</div>
+</div>
+</div>
+<div class="fc-details">
+<div class="fc-tags">
+<span class="fc-tag tag-cheap">Lowest Price</span>
+</div>
+<div class="fc-detail-row"><span class="fc-detail-icon">🧳</span><span class="fc-detail-text">Bag not included</span></div>
+<div class="fc-detail-row"><span class="fc-detail-icon">🍽</span><span class="fc-detail-text">Snacks only</span></div>
+<div class="fc-detail-row"><span class="fc-detail-icon">↩</span><span class="fc-detail-text">Non-refundable</span></div>
+</div>
+<div class="fc-price-col">
+<div class="fc-price-from">from</div>
+<div class="fc-price"><sup>$</sup>487</div>
+<div class="fc-price-per">per person</div>
+<button class="fc-select-btn">Select Flight</button>
+</div>
+</div>
+<div class="fc-expand">
+<div class="fc-expand-inner">
+<div class="fc-exp-group"><div class="fc-exp-label">Cabin class</div><div class="cabin-selector"><div class="cabin-opt active">Eco</div><div class="cabin-opt">Plus</div><div class="cabin-opt">Biz</div><div class="cabin-opt">First</div></div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Aircraft</div><div class="fc-exp-val">Airbus A330</div><div class="fc-exp-sub">Wide-body · 2-4-2 config</div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Baggage</div><div class="fc-exp-val">Carry-on only</div><div class="fc-exp-sub">Add bag from $55</div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Flexibility</div><div class="fc-exp-val">Non-refundable</div><div class="fc-exp-sub">No date changes</div></div>
+</div>
+</div>
+</div>
+
+<!-- Card 3 -->
+<div class="flight-card" onclick="toggleExpand(this)">
+<div class="fc-inner">
+<div class="fc-airline">
+<div class="fc-airline-logo logo-c">LH</div>
+<div class="fc-airline-name">Lufthansa</div>
+</div>
+<div class="fc-route">
+<div class="fc-city">
+<div class="fc-time">09:30</div>
+<div class="fc-iata">JFK</div>
+</div>
+<div class="fc-path">
+<div class="fc-duration">12h 45m</div>
+<div class="fc-line"></div>
+<div class="fc-stops">1 stop · FRA</div>
+</div>
+<div class="fc-city">
+<div class="fc-time">01:15</div>
+<div class="fc-iata">FCO</div>
+</div>
+</div>
+<div class="fc-details">
+<div class="fc-tags">
+<span class="fc-tag tag-flex">Most Flexible</span>
+<span class="fc-tag tag-eco">Low Emissions</span>
+</div>
+<div class="fc-detail-row"><span class="fc-detail-icon">🧳</span><span class="fc-detail-text">2 bags included</span></div>
+<div class="fc-detail-row"><span class="fc-detail-icon">🍽</span><span class="fc-detail-text">Full meal service</span></div>
+<div class="fc-detail-row"><span class="fc-detail-icon">↩</span><span class="fc-detail-text">Fully refundable</span></div>
+</div>
+<div class="fc-price-col">
+<div class="fc-price-from">from</div>
+<div class="fc-price"><sup>$</sup>734</div>
+<div class="fc-price-per">per person</div>
+<button class="fc-select-btn">Select Flight</button>
+</div>
+</div>
+<div class="fc-expand">
+<div class="fc-expand-inner">
+<div class="fc-exp-group"><div class="fc-exp-label">Cabin class</div><div class="cabin-selector"><div class="cabin-opt active">Eco</div><div class="cabin-opt">Plus</div><div class="cabin-opt">Biz</div><div class="cabin-opt">First</div></div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Aircraft</div><div class="fc-exp-val">Airbus A380</div><div class="fc-exp-sub">Double-decker · 3-4-3</div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Baggage</div><div class="fc-exp-val">2 × 23kg included</div><div class="fc-exp-sub">+1 carry-on · Personal item</div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Layover</div><div class="fc-exp-val">2h 40m in Frankfurt</div><div class="fc-exp-sub">Access to Senator Lounge</div></div>
+</div>
+</div>
+</div>
+
+<!-- Card 4 -->
+<div class="flight-card" onclick="toggleExpand(this)">
+<div class="fc-inner">
+<div class="fc-airline">
+<div class="fc-airline-logo logo-d">BA</div>
+<div class="fc-airline-name">Brit. Airways</div>
+</div>
+<div class="fc-route">
+<div class="fc-city">
+<div class="fc-time">17:55</div>
+<div class="fc-iata">JFK</div>
+</div>
+<div class="fc-path">
+<div class="fc-duration">11h 20m</div>
+<div class="fc-line"></div>
+<div class="fc-stops">1 stop · LHR</div>
+</div>
+<div class="fc-city">
+<div class="fc-time">07:15</div>
+<div class="fc-iata">FCO</div>
+</div>
+</div>
+<div class="fc-details">
+<div class="fc-tags">
+<span class="fc-tag tag-fast">Premium Economy</span>
+</div>
+<div class="fc-detail-row"><span class="fc-detail-icon">🧳</span><span class="fc-detail-text">2 bags included</span></div>
+<div class="fc-detail-row"><span class="fc-detail-icon">🛏</span><span class="fc-detail-text">Extra legroom</span></div>
+<div class="fc-detail-row"><span class="fc-detail-icon">↩</span><span class="fc-detail-text">Free changes</span></div>
+</div>
+<div class="fc-price-col">
+<div class="fc-price-from">from</div>
+<div class="fc-price"><sup>$</sup>1,240</div>
+<div class="fc-price-per">per person</div>
+<button class="fc-select-btn">Select Flight</button>
+</div>
+</div>
+<div class="fc-expand">
+<div class="fc-expand-inner">
+<div class="fc-exp-group"><div class="fc-exp-label">Cabin class</div><div class="cabin-selector"><div class="cabin-opt">Eco</div><div class="cabin-opt active">Plus</div><div class="cabin-opt">Biz</div><div class="cabin-opt">First</div></div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Aircraft</div><div class="fc-exp-val">Boeing 777-200</div><div class="fc-exp-sub">Wide-body · 3-3-3</div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Baggage</div><div class="fc-exp-val">2 × 23kg included</div><div class="fc-exp-sub">+1 carry-on · Personal item</div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Layover</div><div class="fc-exp-val">1h 55m in London</div><div class="fc-exp-sub">Heathrow Terminal 5</div></div>
+</div>
+</div>
+</div>
+
+<!-- Card 5 — Luxury -->
+<div class="flight-card" onclick="toggleExpand(this)">
+<div class="fc-inner">
+<div class="fc-airline">
+<div class="fc-airline-logo logo-e">EK</div>
+<div class="fc-airline-name">Emirates</div>
+</div>
+<div class="fc-route">
+<div class="fc-city">
+<div class="fc-time">10:20</div>
+<div class="fc-iata">JFK</div>
+</div>
+<div class="fc-path">
+<div class="fc-duration">15h 55m</div>
+<div class="fc-line"></div>
+<div class="fc-stops">1 stop · DXB</div>
+</div>
+<div class="fc-city">
+<div class="fc-time">09:15</div>
+<div class="fc-iata">FCO</div>
+</div>
+</div>
+<div class="fc-details">
+<div class="fc-tags">
+<span class="fc-tag tag-best">Business Class</span>
+</div>
+<div class="fc-detail-row"><span class="fc-detail-icon">🧳</span><span class="fc-detail-text">3 bags included</span></div>
+<div class="fc-detail-row"><span class="fc-detail-icon">🛏</span><span class="fc-detail-text">Lie-flat bed</span></div>
+<div class="fc-detail-row"><span class="fc-detail-icon">✦</span><span class="fc-detail-text">Lounge access</span></div>
+</div>
+<div class="fc-price-col">
+<div class="fc-price-from">from</div>
+<div class="fc-price"><sup>$</sup>3,480</div>
+<div class="fc-price-per">per person</div>
+<button class="fc-select-btn">Select Flight</button>
+</div>
+</div>
+<div class="fc-expand">
+<div class="fc-expand-inner">
+<div class="fc-exp-group"><div class="fc-exp-label">Cabin class</div><div class="cabin-selector"><div class="cabin-opt">Eco</div><div class="cabin-opt">Plus</div><div class="cabin-opt active">Biz</div><div class="cabin-opt">First</div></div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Aircraft</div><div class="fc-exp-val">Airbus A380-800</div><div class="fc-exp-sub">Double-deck · Shower suite</div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Baggage</div><div class="fc-exp-val">3 × 32kg included</div><div class="fc-exp-sub">+1 carry-on · Priority tag</div></div>
+<div class="fc-exp-group"><div class="fc-exp-label">Layover</div><div class="fc-exp-val">2h 15m in Dubai</div><div class="fc-exp-sub">Emirates First Class Lounge</div></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="load-more">
+<button class="load-btn">Load more flights</button>
+</div>
+</div>
+</div>
+
+<script>
+// Search tab toggle
+document.querySelectorAll('.sh-tab').forEach(t => {
+t.addEventListener('click', () => {
+document.querySelectorAll('.sh-tab').forEach(x => x.classList.remove('active'));
+t.classList.add('active');
+});
+});
+// Mood btn toggle
+document.querySelectorAll('.mood-btn').forEach(b => {
+b.addEventListener('click', () => {
+b.classList.toggle('active');
+});
+});
+// Stop options
+document.querySelectorAll('.stop-opt').forEach(o => {
+o.addEventListener('click', () => {
+o.closest('.stop-options').querySelectorAll('.stop-opt').forEach(x => x.classList.remove('active'));
+o.classList.add('active');
+});
+});
+// Time slot
+document.querySelectorAll('.time-slot').forEach(s => {
+s.addEventListener('click', () => s.classList.toggle('active'));
+});
+// Cabin select
+document.querySelectorAll('.cabin-opt').forEach(c => {
+c.addEventListener('click', e => {
+e.stopPropagation();
+c.closest('.cabin-selector').querySelectorAll('.cabin-opt').forEach(x => x.classList.remove('active'));
+c.classList.add('active');
+});
+});
+// Fare calendar day select
+document.querySelectorAll('.fare-day:not(.empty)').forEach(d => {
+d.addEventListener('click', () => {
+document.querySelectorAll('.fare-day').forEach(x => x.classList.remove('active'));
+d.classList.add('active');
+});
+});
+// Flight card expand/collapse
+function toggleExpand(card) {
+const exp = card.querySelector('.fc-expand');
+const isOpen = exp.classList.contains('open');
+// close all
+document.querySelectorAll('.fc-expand').forEach(e => e.classList.remove('open'));
+if (!isOpen) exp.classList.add('open');
+}
+// Price slider label
+const slider = document.querySelector('.price-slider');
+const pval = document.getElementById('pval');
+slider.addEventListener('input', () => {
+pval.textContent = '$' + parseInt(slider.value).toLocaleString();
+});
+</script>
+<script>
+// Banner close functionality
+document.addEventListener('DOMContentLoaded', function() {
+	const banner = document.querySelector('.top-banner');
+	const closeBtn = banner?.querySelector('.banner-close');
+  
+	if (closeBtn) {
+		closeBtn.addEventListener('click', function(e) {
+			e.preventDefault();
+			banner.classList.add('hidden');
+			document.body.style.paddingTop = '0';
+			const nav = document.querySelector('.nav');
+			if (nav) nav.style.top = '0';
+		});
+	}
+  
+	// Check localStorage for dismissed banner
+	if (localStorage.getItem('aloraBannerDismissed') === 'true' && banner) {
+		banner.classList.add('hidden');
+		document.body.style.paddingTop = '0';
+		const nav = document.querySelector('.nav');
+		if (nav) nav.style.top = '0';
+	}
+});
+</script>
+</body>
+</html>

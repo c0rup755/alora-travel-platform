@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alora — Find Your Stay in Rome</title>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+--cream:     #f5f0e6;
+--parchment: #ede6d4;
+--warm:      #faf7f2;
+--ink:       #1a1714;
+--rust:      #b85c38;
+--rust-h:    #d06840;
+--teal:      #2a6b6e;
+--sand:      #c8b89a;
+--mist:      #8a8078;
+--gold:      #a8916a;
+--soft:      rgba(26,23,20,0.06);
+}
+
+/* ══════════════════════════════
+	 TOP PROMO BANNER
+══════════════════════════════ */
+.top-banner {
+	background: linear-gradient(90deg, var(--rust) 0%, var(--rust-h) 100%);
+	color: #fff;
+	padding: 10px 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	font-size: 11px;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 10002;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.top-banner .banner-icon { font-size: 14px; }
+.top-banner .banner-text { font-weight: 500; }
+
+.top-banner .banner-link {
+	color: #fff;
+	text-decoration: none;
+	font-weight: 600;
+	white-space: nowrap;
+	transition: opacity 0.2s;
+	border-bottom: 1px dashed rgba(255,255,255,0.6);
+	padding-bottom: 2px;
+}
+.top-banner .banner-link:hover { opacity: 0.9; border-bottom-color: #fff; }
+
+.top-banner .banner-close {
+	position: absolute;
+	right: 20px;
+	background: none;
+	border: none;
+	color: rgba(255,255,255,0.7);
+	font-size: 18px;
+	cursor: pointer;
+	transition: color 0.2s;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border-radius: 50%;
+}
+.top-banner .banner-close:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.top-banner.hidden { display: none; }
+
+/* Adjust nav position when banner is visible */
+.nav { top: 40px !important; }
+
+/* Adjust page body spacing */
+body { padding-top: 40px; }
+
+/* Responsive banner */
+@media (max-width: 768px) {
+	.top-banner { 
+		flex-wrap: wrap; 
+		text-align: center; 
+		padding: 8px 16px; 
+		font-size: 10px; 
+	}
+	.top-banner .banner-close { right: 12px; top: 6px; }
+	.nav { top: 36px !important; }
+	body { padding-top: 36px; }
+}
+
+html { scroll-behavior: smooth; }
+body {
+background: var(--cream);
+color: var(--ink);
+font-family: 'DM Sans', sans-serif;
+min-height: 100vh;
+overflow-x: hidden;
+}
+body::after {
+content:''; position:fixed; inset:0; pointer-events:none; z-index:9000;
+background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+/* NAV */
+.nav {
+position: sticky; top:0; z-index:10001;
+background: rgba(245,240,230,0.96);
+backdrop-filter: blur(14px);
+border-bottom: 1px solid rgba(26,23,20,0.08);
+display: flex; align-items: center;
+padding: 0 52px; height: 68px; gap: 32px;
+}
+.nav-logo {
+font-family: 'Italiana', serif;
+font-size: 24px; letter-spacing: 0.06em; color: var(--ink);
+white-space: nowrap; text-decoration: none;
+}
+.nav-logo span { color: var(--rust); }
+.nav-back {
+display: flex; align-items: center; gap: 8px;
+font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+color: var(--mist); cursor: pointer; border: none; background: none;
+font-family: 'DM Sans', sans-serif; transition: color .2s;
+text-decoration: none;
+}
+.nav-back:hover { color: var(--rust); }
+.nav-back::before { content: '←'; font-size: 14px; }
+.nav-divider { width:1px; height:28px; background: rgba(26,23,20,0.1); }
+.nav-route {
+display: flex; align-items: center; gap: 10px;
+font-family: 'Cormorant Garamond', serif;
+font-style: italic; font-size: 20px; color: var(--ink);
+}
+.nav-route-arrow { color: var(--rust); font-style: normal; font-size: 14px; }
+.nav-route-date {
+font-family: 'DM Sans', sans-serif; font-style: normal;
+font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+color: var(--mist); margin-left: 8px;
+}
+.nav-right { margin-left: auto; display:flex; align-items:center; gap:20px; }
+.nav-links { display:flex; gap:36px; list-style:none; margin:0; padding:0; }
+.nav-links a {
+text-decoration: none;
+color: var(--ink);
+font-size: 10px;
+letter-spacing: 0.18em;
+text-transform: uppercase;
+transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--rust); }
+nav { flex-wrap: nowrap; justify-content: space-between; }
+.nav-left { display:flex; align-items:center; gap:18px; }
+.nav-tag {
+font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+color: var(--mist);
+}
+.nav-cta {
+background: var(--rust); color:#fff; border:none;
+padding: 9px 22px; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.18em; text-transform:uppercase; cursor:pointer;
+transition: background .2s; text-decoration: none; display: inline-block;
+}
+.nav-cta:hover { background: var(--rust-h); }
+/* SEARCH HERO */
+.search-hero {
+background: var(--ink);
+padding: 36px 52px 0;
+position: relative; overflow: hidden;
+}
+.sh-glow {
+position:absolute; inset:0; pointer-events:none;
+background:
+radial-gradient(ellipse at 5% 100%, rgba(184,92,56,.22) 0%, transparent 50%),
+radial-gradient(ellipse at 95% 0%, rgba(42,107,110,.15) 0%, transparent 50%);
+}
+.sh-label {
+font-size: 9px; letter-spacing:.3em; text-transform:uppercase;
+color: rgba(255,255,255,.3); margin-bottom: 10px;
+display:flex; align-items:center; gap:10px;
+}
+.sh-label::before { content:''; display:block; width:24px; height:1px; background:var(--rust); }
+.sh-headline {
+font-family: 'Italiana', serif;
+font-size: clamp(38px,4.5vw,62px);
+color: #fff; line-height: .95; margin-bottom: 28px;
+}
+.sh-headline em { font-style: italic; color: var(--rust); }
+.search-form {
+display: grid;
+grid-template-columns: 1fr 1fr 180px 180px 130px auto;
+gap: 0;
+background: rgba(255,255,255,.04);
+border: 1px solid rgba(255,255,255,.08);
+margin-bottom: 0;
+}
+.sf-field {
+padding: 18px 22px;
+border-right: 1px solid rgba(255,255,255,.07);
+cursor: pointer; transition: background .2s;
+display:flex; flex-direction:column; gap:4px;
+}
+.sf-field:hover { background: rgba(255,255,255,.05); }
+.sf-field:last-of-type { border-right:none; }
+.sf-label {
+font-size: 8px; letter-spacing:.25em; text-transform:uppercase;
+color: rgba(255,255,255,.3);
+}
+.sf-value {
+font-family: 'Cormorant Garamond', serif;
+font-style:italic; font-size:18px; color:rgba(255,255,255,.85);
+}
+.sf-sub {
+font-size: 9px; color:rgba(255,255,255,.3); letter-spacing:.1em;
+}
+.sf-btn {
+background: var(--rust); color:#fff; border:none;
+padding: 0 28px; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.2em; text-transform:uppercase;
+cursor:pointer; transition:background .2s; white-space:nowrap;
+}
+.sf-btn:hover { background:var(--rust-h); }
+.sh-tabs {
+display:flex; gap:0; margin-top:20px;
+border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.sh-tab {
+padding: 12px 24px; font-size:10px; letter-spacing:.18em; text-transform:uppercase;
+color: rgba(255,255,255,.35); cursor:pointer; border:none; background:none;
+font-family:'DM Sans',sans-serif; border-bottom:2px solid transparent;
+transition: color .2s, border-color .2s;
+}
+.sh-tab:hover { color:rgba(255,255,255,.65); }
+.sh-tab.active { color:var(--rust); border-bottom-color:var(--rust); }
+/* MOOD STRIP */
+.mood-strip {
+background: var(--parchment);
+padding: 16px 52px;
+display:flex; align-items:center; gap:12px;
+border-bottom: 1px solid rgba(26,23,20,.08);
+overflow-x: auto;
+}
+.mood-strip::-webkit-scrollbar { display:none; }
+.mood-label { font-size:8px; letter-spacing:.28em; text-transform:uppercase; color:var(--mist); white-space:nowrap; }
+.mood-btn {
+display:flex; align-items:center; gap:6px;
+padding: 7px 16px; border:1px solid rgba(26,23,20,.15);
+background:transparent; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.15em; text-transform:uppercase;
+color: var(--mist); cursor:pointer; white-space:nowrap;
+transition: all .2s;
+}
+.mood-btn:hover, .mood-btn.active { border-color:var(--rust); color:var(--rust); background:rgba(184,92,56,.05); }
+.mood-dot { width:6px; height:6px; border-radius:50%; background:currentColor; }
+/* MAIN LAYOUT */
+.page-body {
+display: grid;
+grid-template-columns: 300px 1fr;
+gap: 0;
+min-height: calc(100vh - 68px);
+}
+/* SIDEBAR */
+.sidebar {
+background: var(--warm);
+border-right: 1px solid rgba(26,23,20,.08);
+padding: 36px 28px;
+position: sticky; top:68px;
+height: calc(100vh - 68px);
+overflow-y: auto;
+}
+.sidebar::-webkit-scrollbar { width:3px; }
+.sidebar::-webkit-scrollbar-thumb { background:var(--sand); }
+.f-section { margin-bottom:36px; }
+.f-section-title {
+font-size:8px; letter-spacing:.28em; text-transform:uppercase;
+color:var(--mist); margin-bottom:16px;
+display:flex; justify-content:space-between; align-items:center;
+}
+.f-clear { font-size:8px; letter-spacing:.15em; color:var(--rust); cursor:pointer; text-transform:uppercase; }
+.price-range { display:flex; flex-direction:column; gap:12px; }
+.price-slider {
+-webkit-appearance:none; appearance:none;
+width:100%; height:2px; background:var(--sand);
+outline:none; border-radius:2px; cursor:pointer;
+}
+.price-slider::-webkit-slider-thumb {
+-webkit-appearance:none; width:16px; height:16px;
+border-radius:50%; background:var(--rust); cursor:pointer;
+border:3px solid var(--warm); box-shadow:0 0 0 1px var(--rust);
+}
+.price-labels {
+display:flex; justify-content:space-between;
+font-family:'Cormorant Garamond',serif; font-style:italic; font-size:16px;
+color:var(--ink);
+}
+.price-sub { font-size:9px; letter-spacing:.15em; text-transform:uppercase; color:var(--mist); }
+.f-check-list { display:flex; flex-direction:column; gap:10px; }
+.f-check {
+display:flex; align-items:center; gap:10px; cursor:pointer;
+font-size:13px; color:var(--ink); transition:color .2s;
+}
+.f-check:hover { color:var(--rust); }
+.f-check input { display:none; }
+.f-box {
+width:16px; height:16px; border:1px solid var(--sand);
+display:flex; align-items:center; justify-content:center;
+flex-shrink:0; transition:border-color .2s, background .2s;
+}
+.f-check:hover .f-box { border-color:var(--rust); }
+.f-check input:checked ~ .f-box { background:var(--rust); border-color:var(--rust); }
+.f-check input:checked ~ .f-box::after { content:'✓'; font-size:9px; color:#fff; }
+.f-check-label { display:flex; justify-content:space-between; width:100%; }
+.f-check-count { font-size:10px; color:var(--mist); }
+.sidebar-promo {
+background: var(--ink); padding:24px 20px;
+margin-top:8px; position:relative; overflow:hidden;
+}
+.sp-glow {
+position:absolute; inset:0;
+background:radial-gradient(ellipse at 0% 100%, rgba(184,92,56,.25), transparent 60%);
+pointer-events:none;
+}
+.sp-eyebrow { font-size:8px; letter-spacing:.25em; text-transform:uppercase; color:var(--rust); margin-bottom:8px; }
+.sp-title { font-family:'Italiana',serif; font-size:22px; color:#fff; line-height:1.1; margin-bottom:10px; }
+.sp-desc { font-size:11px; color:rgba(255,255,255,.4); line-height:1.7; margin-bottom:16px; }
+.sp-btn {
+background:var(--rust); color:#fff; border:none;
+padding:9px 20px; font-size:9px; letter-spacing:.2em; text-transform:uppercase;
+cursor:pointer; font-family:'DM Sans',sans-serif; width:100%;
+}
+/* RESULTS AREA */
+.results-area { padding: 28px 40px 60px; }
+.results-header {
+display:flex; align-items:center; justify-content:space-between;
+margin-bottom:24px;
+}
+.rh-count {
+font-family:'Italiana',serif; font-size:34px; color:var(--ink); line-height:1;
+}
+.rh-sub { font-size:11px; color:var(--mist); letter-spacing:.08em; margin-top:2px; }
+.rh-right { display:flex; align-items:center; gap:12px; }
+.sort-label { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--mist); }
+.sort-select {
+background:var(--warm); border:1px solid rgba(26,23,20,.12);
+padding:8px 16px; font-family:'Cormorant Garamond',serif; font-style:italic;
+font-size:15px; color:var(--ink); cursor:pointer; outline:none;
+}
+.alora-insight {
+background: var(--parchment);
+border-left: 3px solid var(--rust);
+padding: 16px 22px;
+margin-bottom: 24px;
+display:flex; align-items:center; gap:20px;
+}
+.ai-icon { font-size:20px; }
+.ai-headline { font-size:13px; font-weight:500; color:var(--ink); margin-bottom:2px; }
+.ai-body { font-size:11px; color:var(--mist); line-height:1.6; }
+.ai-cta { margin-left:auto; white-space:nowrap; font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--rust); cursor:pointer; border:none; background:none; font-family:'DM Sans',sans-serif; }
+.nudge-bar {
+background:rgba(42,107,110,.08);
+border:1px solid rgba(42,107,110,.15);
+padding:12px 20px; margin-bottom:10px;
+display:flex; align-items:center; gap:12px;
+}
+.nudge-icon { font-size:16px; }
+.nudge-text { font-size:12px; color:var(--teal); line-height:1.5; }
+.nudge-text strong { font-weight:500; }
+/* HOTEL CARDS */
+.hotel-list { display:flex; flex-direction:column; gap:16px; }
+.hotel-card {
+background: var(--warm);
+border: 1px solid rgba(26,23,20,.07);
+transition: border-color .25s, box-shadow .25s, transform .25s;
+cursor: pointer; position:relative; overflow:hidden;
+}
+.hotel-card:hover {
+border-color: rgba(184,92,56,.35);
+box-shadow: 0 4px 32px rgba(26,23,20,.08);
+transform: translateY(-1px);
+}
+.hotel-card.featured {
+border-color: rgba(184,92,56,.3);
+}
+.hotel-card.featured::before {
+content:''; position:absolute; left:0; top:0; bottom:0;
+width:3px; background:var(--rust);
+}
+.hc-inner {
+display: grid;
+grid-template-columns: 280px 1fr auto;
+gap: 0;
+}
+.hc-image {
+height: 220px;
+background: linear-gradient(160deg, #c4b49a 0%, #b4a488 20%, #a49478 35%, #948468 50%, #e8d4b8 60%);
+position: relative;
+}
+.hc-image::after {
+content:''; position:absolute; inset:0;
+background: linear-gradient(transparent 60%, rgba(26,23,20,0.7) 100%);
+}
+.hc-badge {
+position: absolute; top: 16px; left: 16px;
+background: var(--rust); color: #fff;
+padding: 4px 12px; font-size: 8px;
+letter-spacing: .15em; text-transform: uppercase;
+z-index: 2;
+}
+.hc-content {
+padding: 24px 28px;
+display: flex; flex-direction: column; gap: 12px;
+}
+.hc-name {
+font-family: 'Italiana', serif;
+font-size: 24px; color: var(--ink);
+line-height: 1.1;
+}
+.hc-location {
+font-size: 11px; color: var(--mist);
+letter-spacing: .12em; text-transform: uppercase;
+}
+.hc-rating {
+display: flex; align-items: center; gap: 8px;
+}
+.hc-stars { color: var(--gold); font-size: 14px; }
+.hc-score {
+font-family: 'Space Mono', monospace;
+font-size: 12px; color: var(--ink);
+}
+.hc-desc {
+font-family: 'Cormorant Garamond', serif;
+font-style: italic; font-size: 15px;
+color: var(--mist); line-height: 1.6;
+}
+.hc-amenities {
+display: flex; gap: 12px; flex-wrap: wrap;
+}
+.hc-amenity {
+font-size: 10px; color: var(--mist);
+display: flex; align-items: center; gap: 4px;
+}
+.hc-price-col {
+padding: 24px 28px;
+display: flex; flex-direction: column;
+align-items: flex-end; gap: 8px;
+min-width: 180px;
+border-left: 1px solid rgba(26,23,20,.06);
+}
+.hc-price-from { font-size: 8px; letter-spacing:.2em; text-transform:uppercase; color:var(--mist); }
+.hc-price {
+font-family:'Italiana',serif; font-size:38px; color:var(--ink); line-height:1;
+}
+.hc-price sup { font-size:16px; vertical-align:super; font-family:'DM Sans',sans-serif; font-weight:300; }
+.hc-price-per { font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--mist); }
+.hc-total { font-size: 11px; color: var(--mist); margin-top: 4px; }
+.hc-select-btn {
+background:var(--rust); color:#fff; border:none;
+padding: 10px 20px; font-family:'DM Sans',sans-serif;
+font-size:9px; letter-spacing:.2em; text-transform:uppercase; cursor:pointer;
+transition:background .2s; width:100%; text-align:center; margin-top: 8px;
+}
+.hc-select-btn:hover { background:var(--rust-h); }
+.hc-tags { display:flex; gap:6px; flex-wrap:wrap; margin-top: 8px; }
+.hc-tag {
+font-size:8px; letter-spacing:.15em; text-transform:uppercase;
+padding:3px 9px; border:1px solid rgba(26,23,20,.15); color:var(--mist);
+}
+.load-more {
+text-align:center; padding:32px 0 0;
+}
+.load-btn {
+background:transparent; border:1px solid rgba(26,23,20,.2);
+padding:14px 48px; font-family:'DM Sans',sans-serif;
+font-size:10px; letter-spacing:.22em; text-transform:uppercase;
+color:var(--mist); cursor:pointer; transition:all .2s;
+}
+.load-btn:hover { border-color:var(--rust); color:var(--rust); }
+/* RESPONSIVE */
+@media(max-width:1100px) {
+.page-body { grid-template-columns:260px 1fr; }
+}
+@media(max-width:900px) {
+nav { padding:0 20px; }
+.search-hero { padding:28px 20px 0; }
+.search-form { grid-template-columns:1fr 1fr; }
+.sf-btn { grid-column:span 2; padding:16px; }
+.mood-strip { padding:12px 20px; }
+.page-body { grid-template-columns:1fr; }
+.sidebar { display:none; }
+.results-area { padding:20px 20px 48px; }
+.hc-inner { grid-template-columns:1fr; }
+.hc-image { height: 180px; }
+.hc-price-col { border-left: none; border-top: 1px solid rgba(26,23,20,.06); padding-top: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP PROMO BANNER -->
+<div class="top-banner">
+	<span class="banner-icon">✦</span>
+	<span class="banner-text">Spring in Europe is calling — Book by March 31st for 15% off Mediterranean journeys</span>
+	<a href="alora-planner.html" class="banner-link">Plan Your Escape →</a>
+	<button class="banner-close" onclick="this.parentElement.style.display='none'" aria-label="Close">×</button>
+</div>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+<div class="nav-left">
+<a href="alora-homepage.html" class="nav-logo">Al<span>o</span>ra</a>
+<a href="alora-homepage.html" class="nav-back">All Travel</a>
+<div class="nav-divider"></div>
+<div class="nav-route">
+Rome, Italy <span class="nav-route-date">Mar 14 – Mar 24 · 2 Adults · 10 nights</span>
+</div>
+</div>
+<ul class="nav-links">
+<li><a href="alora-flights.html">Flights</a></li>
+<li><a href="alora-hotels.html">Hotels</a></li>
+<li><a href="alora-cruises.html">Cruises</a></li>
+<li><a href="alora-planner.html">Plan a Trip</a></li>
+	<li><a href="alora-homepage.html">Inspire Me</a></li>
+</ul>
+<div class="nav-right">
+<span class="nav-tag">183 hotels found</span>
+<a href="#" class="nav-cta">My Trips</a>
+</div>
+</nav>
+
+<!-- SEARCH HERO -->
+<div class="search-hero">
+<div class="sh-glow"></div>
+<div class="sh-label">Hotel Search</div>
+<h1 class="sh-headline">Stay in <em>Rome</em></h1>
+<div class="search-form">
+<div class="sf-field">
+<div class="sf-label">Destination</div>
+<div class="sf-value">Rome, Italy</div>
+<div class="sf-sub">All neighbourhoods</div>
+</div>
+<div class="sf-field">
+<div class="sf-label">Check In</div>
+<div class="sf-value">Mar 14</div>
+<div class="sf-sub">Friday evening</div>
+</div>
+<div class="sf-field">
+<div class="sf-label">Check Out</div>
+<div class="sf-value">Mar 24</div>
+<div class="sf-sub">Monday morning</div>
+</div>
+<div class="sf-field">
+<div class="sf-label">Guests & Rooms</div>
+<div class="sf-value">2 Guests</div>
+<div class="sf-sub">1 room</div>
+</div>
+<button class="sf-btn">Search</button>
+</div>
+<div class="sh-tabs">
+<button class="sh-tab active">Hotels</button>
+<button class="sh-tab">Apartments</button>
+<button class="sh-tab">Villas</button>
+<button class="sh-tab">✦ Alora Picks</button>
+</div>
+</div>
+
+<!-- MOOD FILTER STRIP -->
+<div class="mood-strip">
+<span class="mood-label">The vibe I want</span>
+<button class="mood-btn active"><span class="mood-dot"></span>🏛 Historic & Grand</button>
+<button class="mood-btn"><span class="mood-dot"></span>🌿 Secret Garden</button>
+<button class="mood-btn"><span class="mood-dot"></span>🌅 Rooftop Views</button>
+<button class="mood-btn"><span class="mood-dot"></span>🕯 Intimate Boutique</button>
+<button class="mood-btn"><span class="mood-dot"></span>💼 Work & Stay</button>
+<button class="mood-btn"><span class="mood-dot"></span>👨‍👩‍👧 Family Friendly</button>
+<button class="mood-btn"><span class="mood-dot"></span>🥂 Honeymoon Suite</button>
+</div>
+
+<!-- PAGE BODY -->
+<div class="page-body">
+<!-- SIDEBAR -->
+<aside class="sidebar">
+<div class="f-section">
+<div class="f-section-title">Price per night <span class="f-clear">Reset</span></div>
+<div class="price-range">
+<input type="range" class="price-slider" min="60" max="1200" value="600" oninput="document.getElementById('pval').textContent='$'+this.value">
+<div class="price-labels">
+<span>$60</span>
+<span id="pval">$600</span>
+</div>
+<div class="price-sub">Showing all budgets</div>
+</div>
+</div>
+<div class="f-section">
+<div class="f-section-title">Star rating</div>
+<div class="f-check-list">
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>★★★★★</span><span class="f-check-count">42</span></div></label>
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>★★★★</span><span class="f-check-count">68</span></div></label>
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>★★★</span><span class="f-check-count">51</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>★★</span><span class="f-check-count">18</span></div></label>
+</div>
+</div>
+<div class="f-section">
+<div class="f-section-title">Amenities</div>
+<div class="f-check-list">
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>Free WiFi</span><span class="f-check-count">162</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Pool</span><span class="f-check-count">44</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Spa & Wellness</span><span class="f-check-count">38</span></div></label>
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>Breakfast Included</span><span class="f-check-count">89</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Rooftop Bar</span><span class="f-check-count">27</span></div></label>
+</div>
+</div>
+<div class="f-section">
+<div class="f-section-title">Neighbourhood</div>
+<div class="f-check-list">
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>Centro</span><span class="f-check-count">54</span></div></label>
+<label class="f-check"><input type="checkbox" checked><div class="f-box"></div><div class="f-check-label"><span>Trastevere</span><span class="f-check-count">32</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Prati</span><span class="f-check-count">28</span></div></label>
+<label class="f-check"><input type="checkbox"><div class="f-box"></div><div class="f-check-label"><span>Navona</span><span class="f-check-count">24</span></div></label>
+</div>
+</div>
+<div class="sidebar-promo">
+<div class="sp-glow"></div>
+<div class="sp-eyebrow">Alora Insight</div>
+<div class="sp-title">"March is Rome's sweet spot — warm enough to wander, quiet enough to breathe."</div>
+<div class="sp-desc">Crowds peak in May. You've chosen well. Booking now secures the best rooms at this price.</div>
+<button class="sp-btn">Set Price Alert</button>
+</div>
+</aside>
+
+<!-- RESULTS -->
+<div class="results-area">
+<div class="results-header">
+<div class="rh-left">
+<div class="rh-count">183 stays</div>
+<div class="rh-sub">Rome · Mar 14 – 24 · 2 adults · 10 nights</div>
+</div>
+<div class="rh-right">
+<span class="sort-label">Sort by</span>
+<select class="sort-select">
+<option>Alora Recommended</option>
+<option>Lowest price</option>
+<option>Highest rated</option>
+<option>Most reviewed</option>
+</select>
+</div>
+</div>
+
+<div class="alora-insight">
+<div class="ai-icon">✦</div>
+<div class="ai-text">
+<div class="ai-headline">This is the right week to be in Rome</div>
+<div class="ai-body">Hotel availability is <strong>higher than average</strong> for Mar 14–24. The Trastevere and Centro Storico neighbourhoods have the best value-to-experience ratio right now.</div>
+</div>
+<button class="ai-cta">Why this week? →</button>
+</div>
+
+<div class="nudge-bar">
+<div class="nudge-icon">🔥</div>
+<div class="nudge-text"><strong>Hotel de Russie</strong> and <strong>Palazzo Naiadi</strong> have been viewed by 18 people in the last hour. The Palazzo suite sells out most Saturdays.</div>
+</div>
+
+<!-- HOTEL CARDS -->
+<div class="hotel-list">
+<!-- Card 1 - Featured -->
+<div class="hotel-card featured">
+<div class="hc-inner">
+<div class="hc-image">
+<span class="hc-badge">Alora's Pick · 10% off today</span>
+</div>
+<div class="hc-content">
+<div class="hc-name">Palazzo Naiadi</div>
+<div class="hc-location">Piazza della Repubblica, Centro Storico</div>
+<div class="hc-rating">
+<span class="hc-stars">★★★★★</span>
+<span class="hc-score">9.4 Exceptional · 2,841 reviews</span>
+</div>
+<div class="hc-desc">"The kind of Roman grandeur that makes you forget your own name. Frescoed ceilings, a rooftop pool with Pantheon views, and a breakfast spread worthy of the Senate."</div>
+<div class="hc-amenities">
+<span class="hc-amenity">🏊 Rooftop Pool</span>
+<span class="hc-amenity">🍳 Breakfast Incl.</span>
+<span class="hc-amenity">🧖 Full Spa</span>
+<span class="hc-amenity">🚗 Valet</span>
+</div>
+<div class="hc-tags">
+<span class="hc-tag">Most booked</span>
+<span class="hc-tag">Free cancellation</span>
+</div>
+</div>
+<div class="hc-price-col">
+<div class="hc-price-from">from</div>
+<div class="hc-price"><sup>$</sup>348</div>
+<div class="hc-price-per">per night</div>
+<div class="hc-total">$3,480 total · 10 nights</div>
+<button class="hc-select-btn">View Rooms</button>
+</div>
+</div>
+</div>
+
+<!-- Card 2 -->
+<div class="hotel-card">
+<div class="hc-inner">
+<div class="hc-image" style="background: linear-gradient(160deg, #a49478 0%, #948468 20%, #847458 35%, #746448 50%, #c8b898 60%);">
+</div>
+<div class="hc-content">
+<div class="hc-name">Hotel Donna Camilla Savelli</div>
+<div class="hc-location">Via Garibaldi, Trastevere</div>
+<div class="hc-rating">
+<span class="hc-stars">★★★★★</span>
+<span class="hc-score">8.8 Excellent · 1,204 reviews</span>
+</div>
+<div class="hc-desc">"A converted 17th-century convent — so Roman it almost aches. The cloister garden at golden hour is something you will describe to strangers for years."</div>
+<div class="hc-amenities">
+<span class="hc-amenity">🏛 17th-C Convent</span>
+<span class="hc-amenity">🌿 Cloistered Garden</span>
+<span class="hc-amenity">🍷 Wine Bar</span>
+</div>
+<div class="hc-tags">
+<span class="hc-tag">Free cancellation</span>
+</div>
+</div>
+<div class="hc-price-col">
+<div class="hc-price-from">from</div>
+<div class="hc-price"><sup>$</sup>188</div>
+<div class="hc-price-per">per night</div>
+<div class="hc-total">$1,880 total · 10 nights</div>
+<button class="hc-select-btn">View Rooms</button>
+</div>
+</div>
+</div>
+
+<!-- Card 3 -->
+<div class="hotel-card">
+<div class="hc-inner">
+<div class="hc-image" style="background: linear-gradient(160deg, #c4a488 0%, #b49478 20%, #a48468 35%, #947458 50%, #e8d4b8 60%);">
+<span class="hc-badge" style="background: var(--teal);">Almost full</span>
+</div>
+<div class="hc-content">
+<div class="hc-name">Casa di Fiori</div>
+<div class="hc-location">Campo de' Fiori</div>
+<div class="hc-rating">
+<span class="hc-stars">★★★★★</span>
+<span class="hc-score">9.1 Exceptional · 347 reviews</span>
+</div>
+<div class="hc-desc">"Only 12 rooms. Each one a story. Run by the same Roman family since 1962, this is the kind of place that makes you feel like a local before the first morning."</div>
+<div class="hc-amenities">
+<span class="hc-amenity">☕ Espresso Bar</span>
+<span class="hc-amenity">🛁 Rainfall Shower</span>
+<span class="hc-amenity">🥐 Daily Breakfast</span>
+</div>
+<div class="hc-tags">
+<span class="hc-tag">Only 2 rooms left</span>
+<span class="hc-tag">Breakfast incl.</span>
+</div>
+</div>
+<div class="hc-price-col">
+<div class="hc-price-from">from</div>
+<div class="hc-price"><sup>$</sup>142</div>
+<div class="hc-price-per">per night</div>
+<div class="hc-total">$1,420 total · 10 nights</div>
+<button class="hc-select-btn">View Rooms</button>
+</div>
+</div>
+</div>
+
+<!-- Card 4 -->
+<div class="hotel-card">
+<div class="hc-inner">
+<div class="hc-image" style="background: linear-gradient(160deg, #84a488 0%, #749478 20%, #648468 35%, #547458 50%, #c8e8d8 60%);">
+</div>
+<div class="hc-content">
+<div class="hc-name">Villa Borghese Terrace</div>
+<div class="hc-location">Viale dei Lecci, Parioli</div>
+<div class="hc-rating">
+<span class="hc-stars">★★★★★</span>
+<span class="hc-score">9.6 Exceptional · 892 reviews</span>
+</div>
+<div class="hc-desc">"Bordered by the Borghese gardens — Rome's own Central Park. The pool is open year-round, the restaurant has a Michelin star, and the quiet here is a luxury in itself."</div>
+<div class="hc-amenities">
+<span class="hc-amenity">🌿 Private Gardens</span>
+<span class="hc-amenity">🏊 Outdoor Pool</span>
+<span class="hc-amenity">🧖 Full Spa</span>
+<span class="hc-amenity">🍽 Fine Dining</span>
+</div>
+<div class="hc-tags">
+<span class="hc-tag">Secret Garden</span>
+<span class="hc-tag">Free cancellation</span>
+</div>
+</div>
+<div class="hc-price-col">
+<div class="hc-price-from">from</div>
+<div class="hc-price"><sup>$</sup>520</div>
+<div class="hc-price-per">per night</div>
+<div class="hc-total">$5,200 total · 10 nights</div>
+<button class="hc-select-btn">View Rooms</button>
+</div>
+</div>
+</div>
+
+<!-- Card 5 -->
+<div class="hotel-card">
+<div class="hc-inner">
+<div class="hc-image" style="background: linear-gradient(160deg, #a48468 0%, #947458 20%, #846448 35%, #745438 50%, #e8c8b8 60%);">
+<span class="hc-badge" style="background: var(--gold);">Smart Pick · Best Value</span>
+</div>
+<div class="hc-content">
+<div class="hc-name">Arco dei Tolomei</div>
+<div class="hc-location">Via dell'Arco de' Tolomei, Testaccio</div>
+<div class="hc-rating">
+<span class="hc-stars">★★★★★</span>
+<span class="hc-score">8.6 Excellent · 614 reviews</span>
+</div>
+<div class="hc-desc">"Budget doesn't mean basic here. Genuine Roman hospitality, cobblestone views, and a neighbourhood so local the tourists haven't found it yet. This is Alora's savvy pick."</div>
+<div class="hc-amenities">
+<span class="hc-amenity">☕ Morning Coffee</span>
+<span class="hc-amenity">🛵 Vespa Hire</span>
+<span class="hc-amenity">🗝 Keyless Entry</span>
+</div>
+<div class="hc-tags">
+<span class="hc-tag">Hidden gem</span>
+<span class="hc-tag">Free cancellation</span>
+</div>
+</div>
+<div class="hc-price-col">
+<div class="hc-price-from">from</div>
+<div class="hc-price"><sup>$</sup>72</div>
+<div class="hc-price-per">per night</div>
+<div class="hc-total">$720 total · 10 nights</div>
+<button class="hc-select-btn">View Rooms</button>
+</div>
+</div>
+</div>
+</div>
+
+<div class="load-more">
+<button class="load-btn">Load more stays</button>
+</div>
+</div>
+</div>
+
+<script>
+// Search tab toggle
+document.querySelectorAll('.sh-tab').forEach(t => {
+t.addEventListener('click', () => {
+document.querySelectorAll('.sh-tab').forEach(x => x.classList.remove('active'));
+t.classList.add('active');
+});
+});
+// Mood btn toggle
+document.querySelectorAll('.mood-btn').forEach(b => {
+b.addEventListener('click', () => {
+b.classList.toggle('active');
+});
+});
+// Price slider label
+const slider = document.querySelector('.price-slider');
+const pval = document.getElementById('pval');
+slider.addEventListener('input', () => {
+pval.textContent = '$' + parseInt(slider.value).toLocaleString();
+});
+</script>
+<script>
+// Banner close functionality
+document.addEventListener('DOMContentLoaded', function() {
+	const banner = document.querySelector('.top-banner');
+	const closeBtn = banner?.querySelector('.banner-close');
+  
+	if (closeBtn) {
+		closeBtn.addEventListener('click', function(e) {
+			e.preventDefault();
+			banner.classList.add('hidden');
+			document.body.style.paddingTop = '0';
+			const nav = document.querySelector('.nav');
+			if (nav) nav.style.top = '0';
+		});
+	}
+  
+	// Check localStorage for dismissed banner
+	if (localStorage.getItem('aloraBannerDismissed') === 'true' && banner) {
+		banner.classList.add('hidden');
+		document.body.style.paddingTop = '0';
+		const nav = document.querySelector('.nav');
+		if (nav) nav.style.top = '0';
+	}
+});
+</script>
+</body>
+</html>

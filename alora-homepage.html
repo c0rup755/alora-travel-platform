@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alora — Journey Beautifully</title>
+<link href="https://fonts.googleapis.com/css2?family=Italiana&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✦</text></svg>">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream:    #f5f0e6;
+  --parchment:#ede6d4;
+  --warm-white:#faf7f2;
+  --ink:      #1a1714;
+  --rust:     #b85c38;
+  --rust-light:#d4724a;
+  --rust-hover:#e8906a;
+  --teal:     #2a6b6e;
+  --sand:     #c8b89a;
+  --mist:     #8a8078;
+  --gold:     #a8916a;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  padding-top: 40px; /* Space for top banner */
+}
+
+/* ── NOISE TEXTURE ── */
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ══════════════════════════════
+   TOP BANNER
+══════════════════════════════ */
+.top-banner {
+  background: linear-gradient(90deg, var(--rust) 0%, var(--rust-light) 100%);
+  color: #fff;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10002;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.top-banner .banner-icon { font-size: 14px; }
+.top-banner .banner-text { font-weight: 500; }
+
+.top-banner .banner-link {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: opacity 0.2s;
+  border-bottom: 1px dashed rgba(255,255,255,0.6);
+  padding-bottom: 2px;
+}
+.top-banner .banner-link:hover { opacity: 0.9; border-bottom-color: #fff; }
+
+.top-banner .banner-close {
+  position: absolute;
+  right: 20px;
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 18px;
+  cursor: pointer;
+  transition: color 0.2s;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+.top-banner .banner-close:hover { color: #fff; background: rgba(255,255,255,0.1); }
+.top-banner.hidden { display: none; }
+
+/* ══════════════════════════════
+   NAV
+══════════════════════════════ */
+nav {
+  position: fixed;
+  top: 40px; /* Below banner */
+  left: 0; right: 0;
+  z-index: 10001;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 60px;
+  height: 72px;
+  transition: background 0.4s ease, border-color 0.4s ease;
+  background: rgba(245,240,230,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(26,23,20,0.08);
+}
+
+nav.scrolled {
+  background: rgba(245,240,230,0.98);
+  box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+}
+
+.nav-logo {
+  font-family: 'Italiana', serif;
+  font-size: 26px;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+  text-decoration: none;
+}
+.nav-logo span { color: var(--rust); }
+
+.nav-links {
+  display: flex; gap: 36px; list-style: none; margin: 0; padding: 0;
+}
+
+.nav-links a {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+}
+.nav-links a:hover { opacity: 1; color: var(--rust); }
+
+.nav-right { display: flex; align-items: center; gap: 20px; }
+
+.nav-cta {
+  background: var(--rust);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+.nav-cta:hover { background: var(--rust-light); }
+
+/* Mobile nav toggle */
+.nav-toggle { display:none; border:0; background:transparent; width:44px; height:44px; align-items:center; justify-content:center; cursor:pointer }
+.nav-toggle .hamburger { display:inline-block; width:20px; height:2px; background:var(--ink); position:relative }
+.nav-toggle .hamburger::before, .nav-toggle .hamburger::after { content:''; position:absolute; left:0; background:var(--ink); width:20px; height:2px; transition:transform .22s ease, opacity .2s ease }
+.nav-toggle .hamburger::before { top:-6px }
+.nav-toggle .hamburger::after { top:6px }
+nav.open .nav-toggle .hamburger { background:transparent }
+nav.open .nav-toggle .hamburger::before { transform:rotate(45deg) translate(4px,4px) }
+nav.open .nav-toggle .hamburger::after { transform:rotate(-45deg) translate(4px,-4px) }
+
+@media (max-width: 900px) {
+  .nav-toggle { display:flex }
+  .nav-links { display:none; position:absolute; left:0; right:0; top:72px; background:var(--cream); flex-direction:column; padding:18px 24px; gap:12px; border-bottom:1px solid rgba(26,23,20,0.04) }
+  nav.open .nav-links { display:flex }
+  .nav-links li { list-style:none }
+  nav { padding:0 20px; top:40px; }
+}
+
+/* ══════════════════════════════
+   HERO - LIGHTER & READABLE
+══════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+  margin-top: 0;
+}
+
+/* Left panel - LIGHTER gradient for readability */
+.hero-left {
+  background: linear-gradient(135deg, #2a2520 0%, #1a1714 100%);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 64px;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Warm glow overlay behind text for contrast */
+.hero-left::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(184,92,56,0.12) 0%, transparent 65%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-left-bg {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 10% 90%, rgba(184,92,56,0.25) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 10%, rgba(42,107,110,0.15) 0%, transparent 55%);
+}
+
+.hero-issue {
+  position: absolute;
+  top: 92px; left: 64px;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  z-index: 2;
+}
+
+.hero-vol {
+  position: absolute;
+  top: 92px; right: 64px;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  z-index: 2;
+}
+
+.hero-headline {
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--rust-light);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.hero-eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--rust-light); }
+
+.hero-h1 {
+  font-family: 'Italiana', serif;
+  font-size: clamp(64px, 7vw, 100px);
+  line-height: 0.88;
+  color: #ffffff;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 30px rgba(0,0,0,0.4);
+}
+
+.hero-h1 em {
+  display: block;
+  font-style: italic;
+  color: var(--rust-light);
+  font-size: 0.85em;
+}
+
+.hero-divider { width: 48px; height: 1px; background: rgba(255,255,255,0.4); margin: 28px 0; }
+
+.hero-sub {
+  font-size: 14px;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.75);
+  max-width: 340px;
+  margin-bottom: 40px;
+}
+
+.hero-btns { display: flex; gap: 12px; }
+
+.btn-primary {
+  background: var(--rust-light);
+  color: #fff;
+  border: none;
+  padding: 14px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-primary:hover { background: var(--rust-hover); transform: translateY(-1px); }
+
+.btn-outline {
+  background: transparent;
+  color: rgba(255,255,255,0.85);
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 14px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-outline:hover { border-color: rgba(255,255,255,0.7); color: #fff; }
+
+/* Right image mosaic */
+.hero-right {
+  position: relative;
+  overflow: hidden;
+  background: var(--parchment);
+}
+
+.hero-mosaic {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 60% 40%;
+  gap: 3px;
+}
+
+.mosaic-cell {
+  position: relative;
+  overflow: hidden;
+}
+
+.mc-amalfi { background: linear-gradient(160deg, #d4a584 0%, #b8825a 30%, #8a5e3e 50%, #e8c4a0 70%, #c2a882 100%); }
+.mc-ocean  { background: linear-gradient(180deg, #87b8c4 0%, #5a9aaa 40%, #3d7a8a 60%, #c8d4b8 80%, #a8b898 100%); }
+.mc-villa  { background: linear-gradient(140deg, #c4a882 0%, #a88a62 40%, #8a6840 60%, #d4b894 80%); grid-column: span 2; }
+
+.mc-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end;
+  padding: 16px;
+  background: linear-gradient(transparent 40%, rgba(26,23,20,0.5) 100%);
+}
+
+.mc-tag {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  font-family: 'Space Mono', monospace;
+}
+
+.hero-badge {
+  position: absolute;
+  bottom: 32px;
+  right: 32px;
+  background: var(--cream);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-left: 3px solid var(--rust);
+  animation: float 4s ease-in-out infinite;
+  z-index: 10;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+.hb-num {
+  font-family: 'Italiana', serif;
+  font-size: 32px;
+  color: var(--ink);
+  line-height: 1;
+}
+.hb-label {
+  font-size: 8px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+/* ══════════════════════════════
+   SEARCH BAR
+══════════════════════════════ */
+.search-section {
+  background: var(--ink);
+  padding: 0 60px;
+}
+
+.search-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.stab {
+  padding: 18px 28px;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  border: none;
+  background: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.stab:hover { color: rgba(255,255,255,0.7); }
+.stab.active { color: var(--rust); border-bottom: 2px solid var(--rust); }
+
+.search-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 0;
+  padding: 20px 0 28px;
+}
+
+.s-field {
+  padding: 16px 24px;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.s-field-label {
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+.s-field-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: rgba(255,255,255,0.8);
+  font-style: italic;
+}
+
+.s-search-btn {
+  background: var(--rust);
+  color: #fff;
+  border: none;
+  padding: 0 40px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-left: 20px;
+}
+.s-search-btn:hover { background: var(--rust-light); }
+
+/* ══════════════════════════════
+   EDITORIAL STRIP
+══════════════════════════════ */
+.editorial-strip {
+  background: var(--parchment);
+  padding: 20px 60px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+  border-bottom: 1px solid rgba(26,23,20,0.08);
+  overflow: hidden;
+}
+
+.es-label {
+  font-size: 8px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--mist);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.es-items {
+  display: flex;
+  gap: 32px;
+  animation: marquee 20s linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.es-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--ink);
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.es-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--rust); flex-shrink: 0; }
+
+/* ══════════════════════════════
+   FEATURED DESTINATIONS
+══════════════════════════════ */
+.destinations {
+  padding: 100px 60px;
+  background: var(--cream);
+}
+
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 52px;
+}
+
+.section-eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Italiana', serif;
+  font-size: clamp(36px, 4vw, 54px);
+  line-height: 1;
+  color: var(--ink);
+}
+
+.section-title em {
+  font-style: italic;
+  color: var(--mist);
+  font-size: 0.75em;
+}
+
+.see-all {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mist);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: color 0.2s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+}
+.see-all:hover { color: var(--rust); }
+.see-all::after { content: '→'; }
+
+.dest-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  grid-template-rows: auto auto;
+  gap: 12px;
+}
+
+.dest-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--parchment);
+}
+
+.dest-card:first-child {
+  grid-row: span 2;
+}
+
+.dest-visual {
+  aspect-ratio: 3/4;
+  position: relative;
+  overflow: hidden;
+}
+
+.dest-card:first-child .dest-visual {
+  aspect-ratio: unset;
+  height: 100%;
+  min-height: 520px;
+}
+
+.scene-amalfi {
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg, #87b0c8 0%, #7aa4be 15%, #6998b4 25%, #5a8eaa 30%, #c8b490 35%, #b8a480 40%, #a8946e 45%, #986840 50%, #e8cca8 55%, #d8bc98 60%, #c8ac88 65%, #e0d0b8 75%, #f0e4d0 85%, #ffe8d0 100%);
+  position: relative;
+}
+
+.scene-santorini {
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg, #a8c8e8 0%, #90b8d8 20%, #78a8c8 35%, #e8e8f0 45%, #d8d8e8 50%, #f0f0f8 55%, #7098b8 60%, #5888a8 70%, #90b8d8 80%, #a8c8e0 100%);
+}
+
+.scene-tulum {
+  width: 100%; height: 100%;
+  background: linear-gradient(180deg, #70b8c8 0%, #60a8b8 20%, #50a0b0 35%, #98d4d8 45%, #b8e8e8 50%, #90d0d0 55%, #c8e4c0 65%, #a8d4a0 75%, #88c488 85%, #98c898 100%);
+}
+
+.scene-morocco {
+  width: 100%; height: 100%;
+  background: linear-gradient(160deg, #d8a870 0%, #c89860 20%, #b88850 40%, #e8c090 55%, #d0a878 65%, #c09868 75%, #b08858 85%, #d4a878 100%);
+}
+
+.dest-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(transparent 35%, rgba(26,23,20,0.7) 100%);
+  transition: opacity 0.3s ease;
+}
+
+.dest-card:hover .dest-overlay { opacity: 0.85; }
+
+.dest-info {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 28px;
+  color: #fff;
+}
+
+.dest-region {
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 6px;
+}
+
+.dest-name {
+  font-family: 'Italiana', serif;
+  font-size: 32px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.dest-card:first-child .dest-name { font-size: 48px; }
+
+.dest-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dest-price {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 16px;
+  color: rgba(255,255,255,0.75);
+}
+
+.dest-tag {
+  font-size: 8px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rust);
+  border: 1px solid rgba(184,92,56,0.5);
+  padding: 3px 10px;
+}
+
+/* ══════════════════════════════
+   SERVICES ROW
+══════════════════════════════ */
+.services {
+  background: var(--ink);
+  padding: 80px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+}
+
+.svc {
+  padding: 48px;
+  border-right: 1px solid rgba(255,255,255,0.06);
+  transition: background 0.3s ease;
+  cursor: pointer;
+}
+
+.svc:last-child { border-right: none; }
+.svc:hover { background: rgba(255,255,255,0.03); }
+
+.svc-icon {
+  width: 44px; height: 44px;
+  border: 1px solid rgba(184,92,56,0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  margin-bottom: 28px;
+  color: var(--rust);
+}
+
+.svc-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  color: rgba(255,255,255,0.2);
+  margin-bottom: 16px;
+}
+
+.svc-title {
+  font-family: 'Italiana', serif;
+  font-size: 32px;
+  color: #fff;
+  margin-bottom: 16px;
+  line-height: 1;
+}
+
+.svc-desc {
+  font-size: 13px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 28px;
+}
+
+.svc-link {
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--rust);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+.svc-link::after { content: '→'; font-size: 12px; }
+
+/* ══════════════════════════════
+   EDITORIAL FEATURE
+══════════════════════════════ */
+.editorial {
+  padding: 100px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  background: var(--warm-white);
+}
+
+.ed-label {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--rust);
+  margin-bottom: 20px;
+}
+
+.ed-title {
+  font-family: 'Italiana', serif;
+  font-size: clamp(40px, 4vw, 60px);
+  line-height: 1.05;
+  color: var(--ink);
+  margin-bottom: 24px;
+}
+
+.ed-body {
+  font-size: 15px;
+  line-height: 1.9;
+  color: var(--mist);
+  margin-bottom: 32px;
+}
+
+.ed-body strong {
+  color: var(--ink);
+  font-weight: 400;
+}
+
+.ed-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0;
+  border-top: 1px solid rgba(26,23,20,0.1);
+  padding-top: 32px;
+}
+
+.ed-stat { padding-right: 24px; border-right: 1px solid rgba(26,23,20,0.08); }
+.ed-stat:last-child { border-right: none; padding-left: 24px; padding-right: 0; }
+.ed-stat:nth-child(2) { padding: 0 24px; }
+
+.ed-stat-num {
+  font-family: 'Italiana', serif;
+  font-size: 40px;
+  color: var(--rust);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.ed-stat-label {
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+
+.ed-right {
+  position: relative;
+}
+
+.ed-visual-main {
+  width: 100%;
+  aspect-ratio: 4/5;
+  background: linear-gradient(160deg, #c4b49a 0%, #b4a488 20%, #a49478 35%, #948468 50%, #e8d4b8 60%, #d8c4a8 70%, #c8b498 80%, #e0ceb8 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.ed-visual-float {
+  position: absolute;
+  bottom: -20px;
+  left: -40px;
+  width: 55%;
+  aspect-ratio: 3/4;
+  background: linear-gradient(140deg, #2a6b6e 0%, #1e5558 30%, #2a6b6e 60%, #3a8080 100%);
+  border: 4px solid var(--warm-white);
+}
+
+.ed-visual-tag {
+  position: absolute;
+  top: 24px; right: -12px;
+  background: var(--rust);
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+}
+
+/* ══════════════════════════════
+   TESTIMONIAL
+══════════════════════════════ */
+.testimonial {
+  background: var(--parchment);
+  padding: 80px 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonial::before {
+  content: '"';
+  font-family: 'Italiana', serif;
+  font-size: 400px;
+  color: rgba(184,92,56,0.06);
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.t-quote {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.5;
+  color: var(--ink);
+  max-width: 720px;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.t-author {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--mist);
+}
+.t-author span { color: var(--rust); }
+
+/* ══════════════════════════════
+   NEWSLETTER
+══════════════════════════════ */
+.newsletter {
+  background: var(--rust);
+  padding: 80px 60px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.nl-eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 16px;
+}
+
+.nl-title {
+  font-family: 'Italiana', serif;
+  font-size: clamp(36px, 3.5vw, 52px);
+  color: #fff;
+  line-height: 1.05;
+}
+
+.nl-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nl-desc {
+  font-size: 14px;
+  line-height: 1.7;
+  color: rgba(255,255,255,0.6);
+}
+
+.nl-form {
+  display: flex;
+  gap: 0;
+}
+
+.nl-input {
+  flex: 1;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-right: none;
+  padding: 14px 20px;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  outline: none;
+}
+
+.nl-input::placeholder { color: rgba(255,255,255,0.35); font-style: italic; }
+
+.nl-btn {
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  padding: 14px 28px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s ease;
+}
+.nl-btn:hover { background: #2a2420; }
+
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+footer {
+  background: var(--ink);
+  padding: 64px 60px 40px;
+}
+
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+  gap: 60px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.footer-brand-logo {
+  font-family: 'Italiana', serif;
+  font-size: 32px;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.footer-brand-logo span { color: var(--rust); }
+
+.footer-brand-desc {
+  font-size: 13px;
+  line-height: 1.8;
+  color: rgba(255,255,255,0.3);
+  max-width: 260px;
+}
+
+.footer-col-title {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.25);
+  margin-bottom: 20px;
+}
+
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-links a {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  text-decoration: none;
+  transition: color 0.2s ease;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: 16px;
+}
+.footer-links a:hover { color: rgba(255,255,255,0.8); }
+
+.footer-bottom {
+  padding-top: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: rgba(255,255,255,0.2);
+}
+
+/* ══════════════════════════════
+   ANIMATIONS
+══════════════════════════════ */
+.fade-up {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (max-width: 900px) {
+  nav { padding: 0 24px; top: 40px; }
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .hero-left { padding: 120px 32px 64px; }
+  .destinations, .editorial, .services { padding: 60px 24px; }
+  .editorial, .newsletter { grid-template-columns: 1fr; gap: 40px; }
+  .dest-grid { grid-template-columns: 1fr; }
+  .dest-card:first-child { grid-row: unset; }
+  .services { grid-template-columns: 1fr; }
+  .search-section, .editorial-strip { padding: 0 24px; }
+  .search-bar { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .ed-right { display: none; }
+  .top-banner { flex-wrap: wrap; text-align: center; padding: 8px 16px; font-size: 10px; }
+  .top-banner .banner-close { right: 12px; top: 6px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BANNER -->
+<div class="top-banner">
+  <span class="banner-icon">✦</span>
+  <span class="banner-text">Spring in Europe is calling — Book by March 31st for 15% off Mediterranean journeys</span>
+  <a href="alora-planner.html" class="banner-link">Plan Your Escape →</a>
+  <button class="banner-close" aria-label="Close banner">×</button>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="wanderlux-homepage.html" class="nav-logo">Al<span>o</span>ra</a>
+  <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-label="Open navigation">
+    <span class="hamburger" aria-hidden="true"></span>
+  </button>
+  <ul id="nav-links" class="nav-links">
+    <li><a href="alora-flights.html">Flights</a></li>
+    <li><a href="alora-hotels.html">Hotels</a></li>
+    <li><a href="alora-cruises.html">Cruises</a></li>
+    <li><a href="alora-planner.html">Plan a Trip</a></li>
+    <li><a href="alora-planner.html">Inspire Me</a></li>
+  </ul>
+  <div class="nav-right">
+    <a class="nav-cta" href="alora-planner.html">Start Planning</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-left-bg"></div>
+    <div class="hero-issue">Alora — The World Issue</div>
+    <div class="hero-vol">2026 Collection</div>
+    <div class="hero-headline">
+      <div class="hero-eyebrow">AI Travel Concierge</div>
+      <h1 class="hero-h1">Journey<em>Beautifully.</em></h1>
+      <div class="hero-divider"></div>
+      <p class="hero-sub">Not just a booking engine. A philosophy. We craft journeys for those who understand that how you travel is as meaningful as where you go.</p>
+      <div class="hero-btns">
+        <a href="alora-planner.html" class="btn-primary">Explore Destinations</a>
+        <a href="#editorial" class="btn-outline">Our Story</a>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-mosaic">
+      <div class="mosaic-cell mc-amalfi">
+        <div class="mc-overlay"><span class="mc-tag">Amalfi Coast</span></div>
+      </div>
+      <div class="mosaic-cell mc-ocean">
+        <div class="mc-overlay"><span class="mc-tag">Maldives</span></div>
+      </div>
+      <div class="mosaic-cell mc-villa">
+        <div class="mc-overlay"><span class="mc-tag">Tuscany</span></div>
+      </div>
+    </div>
+    <div class="hero-badge">
+      <div class="hb-num">140+</div>
+      <div class="hb-label">Destinations</div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH -->
+<div class="search-section">
+  <div class="search-tabs">
+    <button class="stab active">✈ Flights</button>
+    <button class="stab">🏨 Hotels</button>
+    <button class="stab">🚢 Cruises</button>
+    <button class="stab">🗺 Bundle</button>
+  </div>
+  <div class="search-bar">
+    <div class="s-field">
+      <div class="s-field-label">From</div>
+      <div class="s-field-value">New York, JFK</div>
+    </div>
+    <div class="s-field">
+      <div class="s-field-label">To</div>
+      <div class="s-field-value">Anywhere beautiful</div>
+    </div>
+    <div class="s-field">
+      <div class="s-field-label">Travel Dates</div>
+      <div class="s-field-value">When the mood strikes</div>
+    </div>
+    <button class="s-search-btn">Search</button>
+  </div>
+</div>
+
+<!-- MARQUEE STRIP -->
+<div class="editorial-strip">
+  <div class="es-label">Trending Now</div>
+  <div class="es-items">
+    <div class="es-item"><div class="es-dot"></div>Amalfi Coast</div>
+    <div class="es-item"><div class="es-dot"></div>Kyoto in Autumn</div>
+    <div class="es-item"><div class="es-dot"></div>Maldives Overwater</div>
+    <div class="es-item"><div class="es-dot"></div>Morocco Riads</div>
+    <div class="es-item"><div class="es-dot"></div>Bora Bora Suites</div>
+    <div class="es-item"><div class="es-dot"></div>Norwegian Fjords</div>
+    <div class="es-item"><div class="es-dot"></div>Tuscany Wine Tour</div>
+    <div class="es-item"><div class="es-dot"></div>Santorini Sunsets</div>
+    <div class="es-item"><div class="es-dot"></div>Amalfi Coast</div>
+    <div class="es-item"><div class="es-dot"></div>Kyoto in Autumn</div>
+    <div class="es-item"><div class="es-dot"></div>Maldives Overwater</div>
+    <div class="es-item"><div class="es-dot"></div>Morocco Riads</div>
+    <div class="es-item"><div class="es-dot"></div>Bora Bora Suites</div>
+    <div class="es-item"><div class="es-dot"></div>Norwegian Fjords</div>
+    <div class="es-item"><div class="es-dot"></div>Tuscany Wine Tour</div>
+    <div class="es-item"><div class="es-dot"></div>Santorini Sunsets</div>
+  </div>
+</div>
+
+<!-- DESTINATIONS -->
+<section class="destinations">
+  <div class="section-header fade-up">
+    <div>
+      <div class="section-eyebrow">Curated Escapes</div>
+      <div class="section-title">Featured<br>Destinations <em>This Season</em></div>
+    </div>
+    <button class="see-all">View All</button>
+  </div>
+  <div class="dest-grid">
+    <div class="dest-card fade-up">
+      <div class="dest-visual">
+        <div class="scene-amalfi"></div>
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <div class="dest-region">Italy — Mediterranean</div>
+          <div class="dest-name">Amalfi<br>Coast</div>
+          <div class="dest-meta">
+            <div class="dest-price">from $3,840 / person</div>
+            <div class="dest-tag">Hotel + Flight</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-card fade-up">
+      <div class="dest-visual">
+        <div class="scene-santorini"></div>
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <div class="dest-region">Greece — Cyclades</div>
+          <div class="dest-name">Santorini</div>
+          <div class="dest-meta">
+            <div class="dest-price">from $2,640</div>
+            <div class="dest-tag">Curated</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-card fade-up">
+      <div class="dest-visual">
+        <div class="scene-tulum"></div>
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <div class="dest-region">Mexico — Riviera Maya</div>
+          <div class="dest-name">Tulum</div>
+          <div class="dest-meta">
+            <div class="dest-price">from $1,980</div>
+            <div class="dest-tag">Eco-Luxury</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dest-card fade-up">
+      <div class="dest-visual">
+        <div class="scene-morocco"></div>
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <div class="dest-region">Africa — Marrakech</div>
+          <div class="dest-name">Morocco</div>
+          <div class="dest-meta">
+            <div class="dest-price">from $2,200</div>
+            <div class="dest-tag">Cultural</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services">
+  <a href="alora-flights.html" class="svc fade-up" style="text-decoration:none;">
+    <div class="svc-icon">✈</div>
+    <div class="svc-num">01 — Flights</div>
+    <div class="svc-title">First Class to Economy. We Handle Both.</div>
+    <div class="svc-desc">Real-time pricing across every major airline. Flexible dates, hidden-city routing, and upgrade alerts — all curated for your comfort and budget.</div>
+    <div class="svc-link">Search Flights</div>
+  </a>
+  <a href="alora-hotels.html" class="svc fade-up" style="text-decoration:none;">
+    <div class="svc-icon">🏨</div>
+    <div class="svc-num">02 — Hotels</div>
+    <div class="svc-title">Boutique Riad to Clifftop Villa.</div>
+    <div class="svc-desc">We don't list every hotel — we curate the ones worth staying in. Each property is selected for character, location, and the feeling it leaves you with.</div>
+    <div class="svc-link">Browse Hotels</div>
+  </a>
+  <a href="alora-cruises.html" class="svc fade-up" style="text-decoration:none;">
+    <div class="svc-icon">🚢</div>
+    <div class="svc-num">03 — Cruises</div>
+    <div class="svc-title">Open Water. Legendary Ports.</div>
+    <div class="svc-desc">Mediterranean, Caribbean, Alaskan fjords, or world circumnavigation — pair your cruise with curated shore excursions and private transfers.</div>
+    <div class="svc-link">Explore Cruises</div>
+  </a>
+</section>
+
+<!-- EDITORIAL FEATURE -->
+<section class="editorial" id="editorial">
+  <div class="fade-up">
+    <div class="ed-label">From the Editors</div>
+    <h2 class="ed-title">The Art of Traveling Without Rushing</h2>
+    <p class="ed-body">
+      There is a kind of travel that is <strong>collection</strong> — stamps, photos, checklists. And then there is the travel that changes the way you see. We exist for the second kind.
+      <br><br>
+      Our AI-powered trip planner doesn't just book. It <strong>listens to how you want to feel</strong>, then builds an itinerary around that. Slow mornings. Long lunches. Spontaneous afternoons. Planned perfectly.
+    </p>
+    <div class="ed-stats">
+      <div class="ed-stat">
+        <div class="ed-stat-num">3M+</div>
+        <div class="ed-stat-label">Journeys Crafted</div>
+      </div>
+      <div class="ed-stat">
+        <div class="ed-stat-num">140</div>
+        <div class="ed-stat-label">Countries</div>
+      </div>
+      <div class="ed-stat">
+        <div class="ed-stat-num">98%</div>
+        <div class="ed-stat-label">Return Clients</div>
+      </div>
+    </div>
+  </div>
+  <div class="ed-right fade-up">
+    <div class="ed-visual-main">
+      <div class="ed-visual-float"></div>
+      <div class="ed-visual-tag">The World Issue 2026</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL -->
+<section class="testimonial">
+  <p class="t-quote fade-up">"Alora didn't just book our honeymoon — they understood exactly the kind of memory we wanted to make. Every detail felt like it was chosen for us specifically."</p>
+  <div class="t-author fade-up">— Sofia & Marcus <span>· Amalfi, Italy</span></div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="fade-up">
+    <div class="nl-eyebrow">The Alora Edit</div>
+    <div class="nl-title">Seasonal deals. Rare finds. First access.</div>
+  </div>
+  <div class="nl-right fade-up">
+    <div class="nl-desc">Join 200,000 travellers who receive our curated travel edits — destination guides, exclusive hotel drops, and flash fares before anyone else.</div>
+    <div class="nl-form">
+      <input class="nl-input" type="email" placeholder="Your email address">
+      <button class="nl-btn">Subscribe</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand-logo">Al<span>o</span>ra</div>
+      <div class="footer-brand-desc">AI-powered travel planning for those who believe the journey is the destination.</div>
+    </div>
+    <div>
+      <div class="footer-col-title">Explore</div>
+      <ul class="footer-links">
+        <li><a href="alora-flights.html">Flights</a></li>
+        <li><a href="alora-hotels.html">Hotels</a></li>
+        <li><a href="alora-cruises.html">Cruises</a></li>
+        <li><a href="alora-planner.html">Destinations</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Plan</div>
+      <ul class="footer-links">
+        <li><a href="alora-planner.html">Trip Builder</a></li>
+        <li><a href="alora-planner.html">Bundle & Save</a></li>
+        <li><a href="alora-planner.html">Inspire Me</a></li>
+        <li><a href="alora-planner.html">Travel Guides</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Company</div>
+      <ul class="footer-links">
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Concierge</a></li>
+        <li><a href="#">Groups</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Alora. All rights reserved.</span>
+    <span>Privacy · Terms · Cookies</span>
+  </div>
+</footer>
+
+<script>
+// Banner close functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const banner = document.querySelector('.top-banner');
+  const closeBtn = banner?.querySelector('.banner-close');
+  
+  if (closeBtn) {
+    closeBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      banner.classList.add('hidden');
+      document.body.style.paddingTop = '0';
+      const nav = document.querySelector('.nav');
+      if (nav) nav.style.top = '0';
+    });
+  }
+  
+  // Check localStorage for dismissed banner
+  if (localStorage.getItem('aloraBannerDismissed') === 'true' && banner) {
+    banner.classList.add('hidden');
+    document.body.style.paddingTop = '0';
+    const nav = document.querySelector('.nav');
+    if (nav) nav.style.top = '0';
+  }
+});
+
+// Nav scroll effect
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// Search tab toggle
+document.querySelectorAll('.stab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  });
+});
+
+// Mobile nav toggle
+const navToggle = document.getElementById('nav-toggle');
+const navLinks = document.getElementById('nav-links');
+const nav = document.getElementById('nav');
+
+navToggle?.addEventListener('click', () => {
+  nav.classList.toggle('open');
+  const expanded = navToggle.getAttribute('aria-expanded') === 'true' || false;
+  navToggle.setAttribute('aria-expanded', !expanded);
+});
+
+// Fade-up on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 80);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
