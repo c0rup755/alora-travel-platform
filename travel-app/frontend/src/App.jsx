@@ -68,94 +68,49 @@ function App() {
         </div>
       </div>
 
-      {/* Navigation */}
-      <nav style={{
-        background: 'white',
-        padding: '15px 20px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-        position: 'sticky',
-        top: 0,
-        zIndex: 100
-      }}>
-        <div style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center'
-        }}>
-          <h1 style={{ fontSize: '24px', color: '#667eea' }}>
-            🌍 Travel Planner
-          </h1>
-          <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-            {['flights', 'hotels', 'cruises', 'planner'].map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                style={{
-                  padding: '10px 20px',
-                  border: 'none',
-                  borderRadius: '25px',
-                  cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: '600',
-                  background: activeTab === tab 
-                    ? 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' 
-                    : '#f0f0f0',
-                  color: activeTab === tab ? 'white' : '#333',
-                  transition: 'all 0.3s ease'
-                }}
-              >
-                {tab === 'flights' && '✈️ '}
-                {tab === 'hotels' && '🏨 '}
-                {tab === 'cruises' && '🚢 '}
-                {tab === 'planner' && '📅 '}
-                {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                {tab === 'planner' && plannerItems.length > 0 && (
-                  <span style={{
-                    background: 'white',
-                    color: '#667eea',
-                    borderRadius: '50%',
-                    padding: '2px 8px',
-                    fontSize: '12px',
-                    marginLeft: '5px'
-                  }}>
-                    {plannerItems.length}
-                  </span>
-                )}
-              </button>
-            ))}
+      <header className="bg-gradient-to-r from-primary to-secondary text-white py-20 px-6 rounded-b-3xl shadow-xl">
+        <div className="max-w-6xl mx-auto text-center">
+          <h1 className="text-5xl font-extrabold mb-4 tracking-tight">✈️ Alora</h1>
+          <p className="text-xl opacity-90 max-w-2xl mx-auto">
+            Plan your perfect trip. Compare flights, hotels, and cruises — all in one place.
+          </p>
+          <div className="mt-8">
+            <button className="bg-gradient-to-r from-primary to-secondary text-white px-8 py-3 rounded-xl font-semibold hover:opacity-90 transition-opacity shadow-md">
+              🔍 Search Flights
+            </button>
           </div>
         </div>
-      </nav>
+      </header>
 
       {/* Main Content */}
       <main style={{ maxWidth: '1200px', margin: '30px auto', padding: '0 20px' }}>
-        {activeTab === 'flights' && (
-          <FlightSearch addToPlanner={addToPlanner} />
-        )}
-        {activeTab === 'hotels' && (
-          <HotelSearch addToPlanner={addToPlanner} />
-        )}
-        {activeTab === 'cruises' && (
-          <div style={{
-            background: 'white',
-            borderRadius: '15px',
-            padding: '40px',
-            textAlign: 'center'
-          }}>
-            <h2>🚢 Cruise Search</h2>
-            <p style={{ color: '#666', marginTop: '10px' }}>
-              Coming soon! Same affiliate integration as flights & hotels.
-            </p>
-          </div>
-        )}
-        {activeTab === 'planner' && (
-          <Planner 
-            items={plannerItems} 
-            removeFromPlanner={removeFromPlanner} 
-          />
-        )}
+        <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow max-w-4xl mx-auto">
+          {activeTab === 'flights' && (
+            <FlightSearch addToPlanner={addToPlanner} />
+          )}
+          {activeTab === 'hotels' && (
+            <HotelSearch addToPlanner={addToPlanner} />
+          )}
+          {activeTab === 'cruises' && (
+            <div style={{
+              background: 'white',
+              borderRadius: '15px',
+              padding: '40px',
+              textAlign: 'center'
+            }}>
+              <h2>🚢 Cruise Search</h2>
+              <p style={{ color: '#666', marginTop: '10px' }}>
+                Coming soon! Same affiliate integration as flights & hotels.
+              </p>
+            </div>
+          )}
+          {activeTab === 'planner' && (
+            <Planner 
+              items={plannerItems} 
+              removeFromPlanner={removeFromPlanner} 
+            />
+          )}
+        </div>
       </main>
 
       {/* Chat Assistant */}
