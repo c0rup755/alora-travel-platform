@@ -82,3 +82,4 @@ Security notes
 - Never commit `.env` or secret keys to the repo. Use platform secrets (Railway / Vercel / GitHub). 
 - Keep provider API calls server-side (they already live in `backend/services`).
 
+# CI/CD test
