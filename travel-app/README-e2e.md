@@ -36,3 +36,30 @@ The Playwright test is a hybrid: it loads the UI and uses Playwright's API fixtu
 Notes
 - Start backend: `cd backend && npm start`
 - Start frontend: `cd frontend && npm start`
+
+Runtime toggle (mock vs. real providers)
+----------------------------------------
+
+If you configured `ADMIN_TOKEN` in your backend environment, you can toggle the `USE_MOCKS` runtime flag without redeploying.
+
+Using the bash helper (requires `jq` to pretty-print):
+
+```bash
+# turn mocks OFF (use real providers)
+ADMIN_TOKEN=your_admin_token BASE_URL=http://localhost:5000 ./scripts/toggle-mocks.sh false
+
+# turn mocks ON
+ADMIN_TOKEN=your_admin_token BASE_URL=http://localhost:5000 ./scripts/toggle-mocks.sh true
+```
+
+Or use the Node helper:
+
+```bash
+ADMIN_TOKEN=your_admin_token node scripts/toggle-mocks.js false
+```
+
+Check status:
+
+```bash
+curl -H "x-admin-token: your_admin_token" http://localhost:5000/api/admin/status
+```
