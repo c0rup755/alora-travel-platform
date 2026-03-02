@@ -17,7 +17,25 @@
     }
   </style>
   <!-- TravelPayouts script; set REACT_APP_TP_SCRIPT_URL in Vercel (e.g. https://tp-em.com/NTAzNDU0.js?t=503454) -->
-  <script data-noptimize="1" data-cfasync="false" data-wpfc-render="false">!function(){var e=document.createElement("script");e.async=1;e.src="%REACT_APP_TP_SCRIPT_URL%";document.head.appendChild(e)}()</script>
+  <script>
+    (function(){
+      try {
+        var tpUrl = "%REACT_APP_TP_SCRIPT_URL%".trim();
+        // If the env variable was not provided at build time it will remain as the literal placeholder
+        var isPlaceholder = tpUrl.indexOf('%') !== -1 || tpUrl === '';
+        if (!isPlaceholder) {
+          var s = document.createElement('script');
+          s.async = true;
+          s.setAttribute('data-noptimize', '1');
+          s.setAttribute('data-cfasync', 'false');
+          s.src = tpUrl;
+          document.head.appendChild(s);
+        }
+      } catch (err) {
+        console.warn('TP script injection skipped', err);
+      }
+    })();
+  </script>
 </head>
 <body>
   <div id="root"></div>
