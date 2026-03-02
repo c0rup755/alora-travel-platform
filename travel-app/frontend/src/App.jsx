@@ -3,6 +3,7 @@ import FlightSearch from './components/FlightSearch';
 import HotelSearch from './components/HotelSearch';
 import Planner from './components/Planner';
 import ChatAssistant from './components/ChatAssistant';
+import AffiliateFallback from './components/AffiliateFallback';
 
 // ✅ Production backend URL - .trim() removes ANY invisible spaces
 const API_BASE = (process.env.REACT_APP_API_BASE || 'http://localhost:5000/api').trim();
@@ -233,6 +234,9 @@ function App() {
                 </li>
                 <li className="flex items-center">
                   <span className="mr-2">🔗</span> Affiliate Partners
+                </li>
+                <li>
+                  <AffiliateFallback />
                 </li>
                 <li className="flex items-center">
                   <span className="mr-2">🔒</span> Privacy Policy
