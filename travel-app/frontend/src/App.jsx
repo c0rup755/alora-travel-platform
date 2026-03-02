@@ -5,7 +5,7 @@ import Planner from './components/Planner';
 import ChatAssistant from './components/ChatAssistant';
 
 // ✅ Production backend URL - .trim() removes ANY invisible spaces
-const API_BASE = 'https://alora-backend-production.up.railway.app/api'.trim();
+const API_BASE = (process.env.REACT_APP_API_BASE || 'http://localhost:5000/api').trim();
 
 function App() {
   const [activeTab, setActiveTab] = useState('flights');

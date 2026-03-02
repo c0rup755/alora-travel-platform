@@ -13,7 +13,7 @@ node scripts/e2e-api.js
 You can set `API_BASE` to point to a different backend host if needed:
 
 ```bash
-API_BASE=https://alora-backend-production.up.railway.app/api node scripts/e2e-api.js
+API_BASE=https://alora-travel-platform-production.up.railway.app/api node scripts/e2e-api.js
 ```
 
 2) UI integration test (Playwright)
@@ -61,5 +61,5 @@ ADMIN_TOKEN=your_admin_token node scripts/toggle-mocks.js false
 Check status:
 
 ```bash
-curl -H "x-admin-token: your_admin_token" http://localhost:5000/api/admin/status
+curl -H "x-admin-token: your_admin_token" ${API_BASE:-http://localhost:5000/api}/admin/status
 ```

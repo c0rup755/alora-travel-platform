@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // Simple API-level E2E test script (no external deps)
-const API_BASE = (process.env.API_BASE || 'http://localhost:5000/api').trim();
+// Production-first with localhost fallback for local dev
+const API_BASE = (process.env.API_BASE || 
+                 (process.env.API_BASE || 'https://alora-travel-platform-production.up.railway.app/api').trim());
 
 async function fetchJson(url, opts) {
   const res = await fetch(url, opts);

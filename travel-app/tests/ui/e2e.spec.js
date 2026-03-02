@@ -2,7 +2,7 @@
 const { test, expect } = require('@playwright/test');
 
 const APP_URL = process.env.APP_URL || 'http://localhost:3000';
-const API_BASE = (process.env.API_BASE || 'http://localhost:5000/api').trim();
+const API_BASE = (process.env.API_BASE || 'https://alora-travel-platform-production.up.railway.app/api').trim();
 
 test('search flights and add to planner (UI+API hybrid)', async ({ page, request }) => {
   await page.goto(APP_URL);

@@ -1,0 +1,10 @@
+{
+  "name": "alora-project",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "smoke:prod": "node scripts/e2e-api.js",
+    "test:e2e": "npx playwright test tests/ui/e2e.spec.js --config=playwright.config.js"
+  },
+  "devDependencies": {}
+}
