@@ -4,8 +4,8 @@ import HotelSearch from './components/HotelSearch';
 import Planner from './components/Planner';
 import ChatAssistant from './components/ChatAssistant';
 
-// ✅ Production backend URL (copy-paste your exact Railway domain)
-const API_BASE = 'https://alora-backend-production.up.railway.app/api';
+// ✅ Production backend URL - .trim() removes any accidental spaces
+const API_BASE = 'https://alora-backend-production.up.railway.app/api'.trim();
 
 function App() {
   const [activeTab, setActiveTab] = useState('flights');
