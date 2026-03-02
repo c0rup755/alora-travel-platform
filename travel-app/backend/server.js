@@ -17,15 +17,21 @@ if (process.env.SENTRY_DSN) {
 }
 
 // ✅ Production CORS config - whitelist Vercel + localhost
+// CORS: allow localhost and Vercel deployments (including subdomains)
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://alora-travel-platform.vercel.app'
+];
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://alora-travel-platform.vercel.app',
-    'https://*.vercel.app'
-  ],
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // allow non-browser requests (curl, server-to-server)
+    if (allowedOrigins.includes(origin) || /\.vercel\.app$/.test(origin)) return callback(null, true);
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-admin-token']
 }));
 
 app.use(express.json());
