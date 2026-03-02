@@ -1,5 +1,9 @@
 const AFFILIATE_ID = process.env.AFFILIATE_ID || 'YOUR_AFFILIATE_ID';
 
+if (!process.env.AFFILIATE_ID || AFFILIATE_ID.startsWith('YOUR')) {
+  console.warn('⚠️  AFFILIATE_ID not set (using placeholder). Hotel booking links will contain a placeholder affiliate id. Set AFFILIATE_ID in your environment.');
+}
+
 function getMockHotels({ location, checkIn, checkOut }) {
   const nights = 5; // Simplified calculation
   

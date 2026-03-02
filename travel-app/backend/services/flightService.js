@@ -6,6 +6,13 @@ const {
 
 const AFFILIATE_ID = process.env.AFFILIATE_ID || 'YOUR_AFFILIATE_ID';
 
+if (!process.env.AFFILIATE_ID || AFFILIATE_ID.startsWith('YOUR')) {
+  console.warn('⚠️  AFFILIATE_ID not set (using placeholder). Affiliate booking links will contain a placeholder affiliate id. Set AFFILIATE_ID in your environment.');
+}
+if (!process.env.KIWI_API_KEY || process.env.KIWI_API_KEY.startsWith('your')) {
+  console.warn('⚠️  KIWI_API_KEY not set. Flight search will fall back to mock data unless a Kiwi/Tequila API key is configured.');
+}
+
 // ─────────────────────────────────────────────────────────────
 // MOCK DATA (Replace with real API calls when ready)
 // ─────────────────────────────────────────────────────────────

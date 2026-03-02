@@ -9,6 +9,11 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      AFFILIATE_ID: ${{ secrets.AFFILIATE_ID }}
+      KIWI_API_KEY: ${{ secrets.KIWI_API_KEY }}
+      SKY_API_KEY: ${{ secrets.SKY_API_KEY }}
+      BOOKING_API_KEY: ${{ secrets.BOOKING_API_KEY }}
 
     steps:
       - uses: actions/checkout@v4
@@ -25,7 +30,8 @@ jobs:
 
       - name: Start backend
         run: |
-          nohup node backend/server.js > backend.log 2>&1 &
+          cd backend
+          nohup node server.js > ../backend.log 2>&1 &
           sleep 1
 
       - name: Wait for backend health
