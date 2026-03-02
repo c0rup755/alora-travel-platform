@@ -1,8 +1,8 @@
 # Travel App (prototype)
 
-[![CI](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml)
+[![CI](https://github.com/c0rup755/alora-travel-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/c0rup755/alora-travel-platform/actions/workflows/ci.yml)
 
-Replace <OWNER> and <REPO> with your GitHub repository owner/name to enable the badge.
+This badge points to the `c0rup755/alora-travel-platform` repository workflow.
 
 This repo contains a minimal full-stack scaffold for a travel app prototype.
 
