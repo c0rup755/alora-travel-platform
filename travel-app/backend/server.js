@@ -1,8 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { searchFlights } = require('./services/flightService');
 const { searchHotels } = require('./services/hotelService');
+const plannerRoutes = require('./routes/plannerRoutes');
+const flightRoutes = require('./routes/flightRoutes');
 
 dotenv.config();
 const app = express();
@@ -11,27 +12,9 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
-// In-memory "database" for planner (replace with MongoDB/PostgreSQL later)
-let userPlanner = [];
-
-// ─────────────────────────────────────────────────────────────
-// FLIGHT SEARCH ENDPOINT
-// ─────────────────────────────────────────────────────────────
-app.get('/api/flights', async (req, res) => {
-  try {
-    const { origin, destination, date } = req.query;
-    
-    if (!origin || !destination || !date) {
-      return res.status(400).json({ error: 'Missing required parameters' });
-    }
-
-    const flights = await searchFlights({ origin, destination, date });
-    res.json({ success: true, data: flights, count: flights.length });
-  } catch (error) {
-    console.error('Flight search error:', error);
-    res.status(500).json({ success: false, error: error.message });
-  }
-});
+// ✅ CORRECT: Routes mounted at /api/*
+app.use('/api/planner', plannerRoutes);
+app.use('/api/flights', flightRoutes);
 
 // ─────────────────────────────────────────────────────────────
 // HOTEL SEARCH ENDPOINT
@@ -50,33 +33,6 @@ app.get('/api/hotels', async (req, res) => {
     console.error('Hotel search error:', error);
     res.status(500).json({ success: false, error: error.message });
   }
-});
-
-// ─────────────────────────────────────────────────────────────
-// PLANNER ENDPOINTS
-// ─────────────────────────────────────────────────────────────
-app.get('/api/planner', (req, res) => {
-  res.json({ success: true, data: userPlanner });
-});
-
-app.post('/api/planner/add', (req, res) => {
-  const item = {
-    id: Date.now().toString(),
-    ...req.body,
-    addedAt: new Date().toISOString()
-  };
-  userPlanner.push(item);
-  res.json({ success: true, data: item });
-});
-
-app.delete('/api/planner/:id', (req, res) => {
-  userPlanner = userPlanner.filter(item => item.id !== req.params.id);
-  res.json({ success: true, message: 'Item removed' });
-});
-
-app.put('/api/planner/clear', (req, res) => {
-  userPlanner = [];
-  res.json({ success: true, message: 'Planner cleared' });
 });
 
 // ─────────────────────────────────────────────────────────────
