@@ -28,6 +28,30 @@ app.use('/api/planner', plannerRoutes);
 app.use('/api/flights', flightRoutes);
 
 // ─────────────────────────────────────────────────────────────
+// ADMIN / RUNTIME TOGGLE (protected by ADMIN_TOKEN env)
+// ─────────────────────────────────────────────────────────────
+const runtimeConfig = require('./runtimeConfig');
+
+app.get('/api/admin/status', (req, res) => {
+  const token = req.header('x-admin-token');
+  if (process.env.ADMIN_TOKEN && token !== process.env.ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, error: 'Forbidden' });
+  }
+  res.json({ success: true, data: { useMocks: runtimeConfig.getUseMocks() } });
+});
+
+app.post('/api/admin/toggle-mocks', (req, res) => {
+  const token = req.header('x-admin-token');
+  if (process.env.ADMIN_TOKEN && token !== process.env.ADMIN_TOKEN) {
+    return res.status(403).json({ success: false, error: 'Forbidden' });
+  }
+
+  const { useMocks } = req.body;
+  runtimeConfig.setUseMocks(!!useMocks);
+  res.json({ success: true, data: { useMocks: runtimeConfig.getUseMocks() } });
+});
+
+// ─────────────────────────────────────────────────────────────
 // HOTEL SEARCH ENDPOINT
 // ─────────────────────────────────────────────────────────────
 app.get('/api/hotels', async (req, res) => {

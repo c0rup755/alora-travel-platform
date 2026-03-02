@@ -5,6 +5,7 @@ const {
 } = require('../adapters/thirdPartyAdapters');
 
 const axios = require('axios');
+const runtimeConfig = require('../runtimeConfig');
 
 const AFFILIATE_ID = process.env.AFFILIATE_ID || 'YOUR_AFFILIATE_ID';
 
@@ -83,7 +84,7 @@ async function searchFlights({ origin, destination, date }) {
   const results = [];
 
   try {
-    const useMocks = (process.env.USE_MOCKS || 'true').toLowerCase() === 'true';
+    const useMocks = runtimeConfig.getUseMocks();
 
     // If a real Kiwi API key is present and USE_MOCKS is not true, attempt real provider call
     if (!useMocks && process.env.KIWI_API_KEY) {
