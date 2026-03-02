@@ -1,4 +1,5 @@
 const express = require('express');
+const Sentry = require('@sentry/node');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const { searchHotels } = require('./services/hotelService');
@@ -8,6 +9,12 @@ const flightRoutes = require('./routes/flightRoutes');
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
+
+// Initialize Sentry if configured
+if (process.env.SENTRY_DSN) {
+  Sentry.init({ dsn: process.env.SENTRY_DSN, environment: process.env.NODE_ENV || 'production' });
+  app.use(Sentry.Handlers.requestHandler());
+}
 
 // ✅ Production CORS config - whitelist Vercel + localhost
 app.use(cors({
@@ -76,6 +83,11 @@ app.get('/api/hotels', async (req, res) => {
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
+
+// Sentry error handler (if used)
+if (process.env.SENTRY_DSN) {
+  app.use(Sentry.Handlers.errorHandler());
+}
 
 // ─────────────────────────────────────────────────────────────
 // START SERVER

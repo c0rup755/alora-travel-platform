@@ -51,6 +51,20 @@ Deployment & production checklist
 	- `AFFILIATE_ID`, `KIWI_API_KEY`, `SKY_API_KEY`, `BOOKING_API_KEY`
 - The CI workflow (`.github/workflows/ci.yml`) reads these secrets and exposes them to the test job.
 
+4) GitHub repository secrets (quick guide)
+- Install GitHub CLI (`gh`) and authenticate: `gh auth login`.
+- To upload secrets quickly from your terminal (replace REPO):
+
+```bash
+export GITHUB_REPO=c0rup755/alora-travel-platform
+export AFFILIATE_ID=your_affiliate_id
+export KIWI_API_KEY=your_kiwi_key
+# ... other secrets as needed
+./scripts/set-github-secrets.sh
+```
+
+The helper will call `gh secret set` for the recommended secret names. You can also add secrets via the GitHub UI.
+
 4) Local preflight
 - Before pushing production keys, verify locally:
 
