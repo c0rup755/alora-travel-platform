@@ -4,6 +4,8 @@ const {
   normalizeExpediaResponse 
 } = require('../adapters/thirdPartyAdapters');
 
+const axios = require('axios');
+
 const AFFILIATE_ID = process.env.AFFILIATE_ID || 'YOUR_AFFILIATE_ID';
 
 if (!process.env.AFFILIATE_ID || AFFILIATE_ID.startsWith('YOUR')) {
@@ -81,25 +83,39 @@ async function searchFlights({ origin, destination, date }) {
   const results = [];
 
   try {
-    // Get mock data (replace with real API calls later)
-    const mockData = getMockFlights({ origin, destination, date });
+    const useMocks = (process.env.USE_MOCKS || 'true').toLowerCase() === 'true';
 
-    // Process each result through appropriate adapter
-    mockData.forEach(flight => {
-      let normalized;
-      
-      if (flight.id?.startsWith('kiwi')) {
-        normalized = normalizeKiwiResponse(flight, AFFILIATE_ID);
-      } else if (flight.QuoteId) {
-        normalized = normalizeSkyscannerResponse(flight, AFFILIATE_ID);
-      } else if (flight.id?.startsWith('exp')) {
-        normalized = normalizeExpediaResponse(flight, AFFILIATE_ID);
+    // If a real Kiwi API key is present and USE_MOCKS is not true, attempt real provider call
+    if (!useMocks && process.env.KIWI_API_KEY) {
+      try {
+        const kiwi = await fetchKiwiFlights({ origin, destination, date });
+        kiwi.forEach(f => results.push(f));
+      } catch (err) {
+        console.warn('⚠️ Kiwi fetch failed, falling back to mocks:', err.message || err);
       }
+    }
 
-      if (normalized) {
-        results.push(normalized);
-      }
-    });
+    // If still no results, use mock data
+    if (results.length === 0) {
+      const mockData = getMockFlights({ origin, destination, date });
+
+      // Process each result through appropriate adapter
+      mockData.forEach(flight => {
+        let normalized;
+        
+        if (flight.id?.startsWith('kiwi')) {
+          normalized = normalizeKiwiResponse(flight, AFFILIATE_ID);
+        } else if (flight.QuoteId) {
+          normalized = normalizeSkyscannerResponse(flight, AFFILIATE_ID);
+        } else if (flight.id?.startsWith('exp')) {
+          normalized = normalizeExpediaResponse(flight, AFFILIATE_ID);
+        }
+
+        if (normalized) {
+          results.push(normalized);
+        }
+      });
+    }
 
     // Remove duplicates (same flight number + date)
     const uniqueResults = results.filter((flight, index, self) =>
@@ -116,6 +132,38 @@ async function searchFlights({ origin, destination, date }) {
     console.error('Flight search error:', error);
     return [];
   }
+}
+
+// Fetch from Kiwi (Tequila) API and normalize results
+async function fetchKiwiFlights({ origin, destination, date }) {
+  const apiKey = process.env.KIWI_API_KEY;
+  if (!apiKey) throw new Error('KIWI_API_KEY not configured');
+
+  const url = 'https://api.tequila.kiwi.com/v2/search';
+  const params = {
+    fly_from: origin,
+    fly_to: destination,
+    date_from: date,
+    date_to: date,
+    curr: 'USD',
+    limit: 8
+  };
+
+  const resp = await axios.get(url, { headers: { apikey: apiKey }, params, timeout: 10000 });
+  const data = resp.data?.data || [];
+
+  // Map Kiwi response objects to normalized format using adapter
+  return data.map(d => normalizeKiwiResponse({
+    id: d.id || d.route?.[0]?.flight_no || `kiwi_${Math.random().toString(36).slice(2,9)}`,
+    price: { total: d.price, currency: d.currency || 'USD' },
+    airlines: [{ name: d.airlines?.[0] || '' }],
+    flight_no: d.route?.[0]?.flight_no || '',
+    departure: { utc: d.utc_departure || d.dTimeUTC || `${date}T00:00:00`, iata: d.flyFrom || origin },
+    arrival: { utc: d.utc_arrival || d.aTimeUTC || `${date}T00:00:00`, iata: d.flyTo || destination },
+    duration: d.fly_duration || '',
+    stops: d.route?.length ? d.route.length - 1 : 0,
+    deep_link: d.deep_link || d.booking_token || ''
+  }, AFFILIATE_ID));
 }
 
 module.exports = { searchFlights };
