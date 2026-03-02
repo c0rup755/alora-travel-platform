@@ -6,6 +6,8 @@ This badge points to the `c0rup755/alora-travel-platform` repository workflow.
 
 This repo contains a minimal full-stack scaffold for a travel app prototype.
 
+[![CI/CD Pipeline](https://github.com/c0rup755/alora-travel-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/c0rup755/alora-travel-platform/actions/workflows/ci.yml)
+
 Structure:
 - backend: Express server + adapters + services
 - frontend: React + Vite app (placeholder components)
