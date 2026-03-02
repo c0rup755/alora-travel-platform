@@ -4,7 +4,7 @@ import HotelSearch from './components/HotelSearch';
 import Planner from './components/Planner';
 import ChatAssistant from './components/ChatAssistant';
 
-// ✅ Production backend URL - .trim() removes any accidental spaces
+// ✅ Production backend URL - .trim() removes ANY invisible spaces
 const API_BASE = 'https://alora-backend-production.up.railway.app/api'.trim();
 
 function App() {
@@ -141,11 +141,11 @@ function App() {
         <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-shadow max-w-4xl mx-auto">
 
           {activeTab === 'flights' && (
-            <FlightSearch addToPlanner={addToPlanner} />
+            <FlightSearch addToPlanner={addToPlanner} apiBase={API_BASE} />
           )}
 
           {activeTab === 'hotels' && (
-            <HotelSearch addToPlanner={addToPlanner} />
+            <HotelSearch addToPlanner={addToPlanner} apiBase={API_BASE} />
           )}
 
           {activeTab === 'cruises' && (

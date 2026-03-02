@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api';
-
-function FlightSearch({ addToPlanner }) {
+function FlightSearch({ addToPlanner, apiBase }) {
+  const API_BASE = (apiBase || 'https://alora-backend-production.up.railway.app/api').trim();
   const [searchParams, setSearchParams] = useState({
     origin: 'JFK',
     destination: 'LHR',
