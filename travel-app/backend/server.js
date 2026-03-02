@@ -20,9 +20,10 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json());
 
-// ✅ CORRECT: Routes mounted at /api/*
+// ✅ Routes mounted at /api/*
 app.use('/api/planner', plannerRoutes);
 app.use('/api/flights', flightRoutes);
 
@@ -46,10 +47,17 @@ app.get('/api/hotels', async (req, res) => {
 });
 
 // ─────────────────────────────────────────────────────────────
+// HEALTH CHECK ENDPOINT (for Railway)
+// ─────────────────────────────────────────────────────────────
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+});
+
+// ─────────────────────────────────────────────────────────────
 // START SERVER
 // ─────────────────────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`🚀 Travel API Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Travel API Server running on port ${PORT}`);
   console.log(`📍 Endpoints:`);
   console.log(`   GET  /api/flights?origin=JFK&destination=LHR&date=2024-12-25`);
   console.log(`   GET  /api/hotels?location=London&checkIn=2024-12-25&checkOut=2024-12-30`);
@@ -57,4 +65,5 @@ app.listen(PORT, () => {
   console.log(`   POST /api/planner/add`);
   console.log(`   DELETE /api/planner/:id`);
   console.log(`   PUT    /api/planner/clear`);
+  console.log(`   GET  /health`);
 });

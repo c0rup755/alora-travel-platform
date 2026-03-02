@@ -38,93 +38,47 @@ function FlightSearch({ addToPlanner, apiBase }) {
   return (
     <div>
       {/* Search Form */}
-      <form onSubmit={handleSearch} style={{
-        background: 'white',
-        borderRadius: '15px',
-        padding: '30px',
-        marginBottom: '30px',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-      }}>
-        <h2 style={{ marginBottom: '20px', color: '#333' }}>✈️ Find Your Flight</h2>
-        
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '15px'
-        }}>
+      <form onSubmit={handleSearch} className="bg-white rounded-2xl p-8 mb-8 shadow-md">
+        <h2 className="mb-5 text-gray-800 text-lg font-semibold">✈️ Find Your Flight</h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div>
-            <label style={{ display: 'block', marginBottom: '5px', fontWeight: '600' }}>
-              From
-            </label>
+            <label className="block mb-1 font-semibold">From</label>
             <input
               type="text"
               value={searchParams.origin}
               onChange={(e) => setSearchParams({ ...searchParams, origin: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '12px',
-                border: '2px solid #e0e0e0',
-                borderRadius: '8px',
-                fontSize: '16px'
-              }}
+              className="w-full p-3 border-2 border-gray-200 rounded-lg text-base"
               placeholder="JFK"
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', marginBottom: '5px', fontWeight: '600' }}>
-              To
-            </label>
+            <label className="block mb-1 font-semibold">To</label>
             <input
               type="text"
               value={searchParams.destination}
               onChange={(e) => setSearchParams({ ...searchParams, destination: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '12px',
-                border: '2px solid #e0e0e0',
-                borderRadius: '8px',
-                fontSize: '16px'
-              }}
+              className="w-full p-3 border-2 border-gray-200 rounded-lg text-base"
               placeholder="LHR"
             />
           </div>
 
           <div>
-            <label style={{ display: 'block', marginBottom: '5px', fontWeight: '600' }}>
-              Date
-            </label>
+            <label className="block mb-1 font-semibold">Date</label>
             <input
               type="date"
               value={searchParams.date}
               onChange={(e) => setSearchParams({ ...searchParams, date: e.target.value })}
-              style={{
-                width: '100%',
-                padding: '12px',
-                border: '2px solid #e0e0e0',
-                borderRadius: '8px',
-                fontSize: '16px'
-              }}
+              className="w-full p-3 border-2 border-gray-200 rounded-lg text-base"
             />
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+          <div className="flex items-end">
             <button
               type="submit"
               disabled={loading}
-              style={{
-                width: '100%',
-                padding: '12px',
-                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                color: 'white',
-                border: 'none',
-                borderRadius: '8px',
-                fontSize: '16px',
-                fontWeight: '600',
-                cursor: loading ? 'not-allowed' : 'pointer',
-                opacity: loading ? 0.7 : 1
-              }}
-            >
+              className={`w-full p-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white rounded-lg text-base font-semibold transition-opacity ${loading ? 'opacity-60 cursor-not-allowed' : 'hover:opacity-90'}`}>
               {loading ? '🔍 Searching...' : '🔍 Search Flights'}
             </button>
           </div>
@@ -133,14 +87,7 @@ function FlightSearch({ addToPlanner, apiBase }) {
 
       {/* Error Message */}
       {error && (
-        <div style={{
-          background: '#fee',
-          border: '1px solid #fcc',
-          color: '#c00',
-          padding: '15px',
-          borderRadius: '8px',
-          marginBottom: '20px'
-        }}>
+        <div className="bg-red-50 border border-red-200 text-red-700 p-4 rounded-lg mb-5">
           ❌ {error}
         </div>
       )}
@@ -148,28 +95,16 @@ function FlightSearch({ addToPlanner, apiBase }) {
       {/* Results */}
       {results.length > 0 && (
         <div>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginBottom: '20px'
-          }}>
-            <h3 style={{ color: '#333' }}>
-              📊 {results.length} flights found
-            </h3>
-            <select style={{
-              padding: '8px 15px',
-              border: '2px solid #e0e0e0',
-              borderRadius: '8px',
-              fontSize: '14px'
-            }}>
+          <div className="flex justify-between items-center mb-5">
+            <h3 className="text-gray-800">📊 {results.length} flights found</h3>
+            <select className="p-2 border-2 border-gray-200 rounded-lg text-sm">
               <option>💰 Sort by: Price (Low to High)</option>
               <option>⏱ Sort by: Duration</option>
               <option>⭐ Sort by: Rating</option>
             </select>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+          <div className="flex flex-col gap-4">
             {results.map(flight => (
               <FlightCard 
                 key={flight.id} 
@@ -182,14 +117,8 @@ function FlightSearch({ addToPlanner, apiBase }) {
       )}
 
       {results.length === 0 && !loading && !error && (
-        <div style={{
-          background: 'white',
-          borderRadius: '15px',
-          padding: '60px',
-          textAlign: 'center',
-          color: '#666'
-        }}>
-          <p style={{ fontSize: '18px' }}>🔍 Search for flights to see results</p>
+        <div className="bg-white rounded-2xl p-16 text-center text-gray-500">
+          <p className="text-lg">🔍 Search for flights to see results</p>
         </div>
       )}
     </div>

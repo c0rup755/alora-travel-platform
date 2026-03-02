@@ -1,5 +1,9 @@
 # Travel App (prototype)
 
+[![CI](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml/badge.svg)](https://github.com/<OWNER>/<REPO>/actions/workflows/ci.yml)
+
+Replace <OWNER> and <REPO> with your GitHub repository owner/name to enable the badge.
+
 This repo contains a minimal full-stack scaffold for a travel app prototype.
 
 Structure:

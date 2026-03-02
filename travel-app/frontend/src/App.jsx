@@ -58,7 +58,7 @@ function App() {
   };
 
   return (
-    <div style={{ paddingBottom: '80px' }}>
+    <div className="pb-20">
       {/* ✅ Step 1: Polished Hero Section */}
       <header className="bg-gradient-to-r from-primary to-secondary text-white py-20 px-6 rounded-b-3xl shadow-xl">
         <div className="max-w-6xl mx-auto text-center">
